@@ -7,8 +7,10 @@ function App() {
   return (
     <>
       <NavBar />
-      <FeaturedAlbumsCtnr />
-      <RecentAlbumsCtnr />
+      <div className="md:w-[70%] bg-pink-400 md:flex md:justify-center md:flex-col md:mx-auto">
+        <FeaturedAlbumsCtnr />
+        <RecentAlbumsCtnr />
+      </div>
     </>
   );
 }

@@ -20,7 +20,7 @@ export default function FeaturedAlbumsCtnr() {
 
     return (
         <>
-        <div className="bg-slate-200 px-2 py-2">
+        <div className="bg-slate-200 px-2 py-2 md:w-fit md:self-center">
             <h4>Popular this week</h4>
             <div className="pt-1 flex gap-x-3 overflow-auto whitespace-nowrap">
                 <Album albumInfo={info} />
