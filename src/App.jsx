@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
+import FeaturedAlbumsCtnr from "./components/FeaturedAlbumsCtnr";
+import RecentAlbumsCtnr from "./components/RecentAlbumsCtnr";
 
 function App() {
-
   return (
     <>
-    {/* <h1 className="text-3xl flex justify-center py-5">Hello world!</h1>  */}
-    <NavBar />
+      <NavBar />
+      <FeaturedAlbumsCtnr />
+      <RecentAlbumsCtnr />
     </>
   );
 }
