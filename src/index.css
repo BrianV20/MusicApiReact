@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .navItem {
+        @apply pb-2 border-2 flex items-center justify-center border-violet-400 hover:border-violet-800 hover:border-b-red-700 w-full transition-all ease-in-out duration-200;
+    }
+}
