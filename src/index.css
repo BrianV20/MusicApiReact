@@ -6,7 +6,20 @@
     .navItem {
         @apply pb-2 flex items-center justify-center hover:border-violet-800 hover:border-b-red-700 w-full transition-all ease-in-out duration-200;
     }
+    
     .navItemLg {
         @apply hidden md:block md:border-2 md:border-violet-800 md:px-2;
+    }
+
+    .burgerMenuIconDefault {
+        @apply text-xl flex items-center transition-all cursor-pointer md:hidden z-50;
+    }
+
+    .burgerMenuLi {
+        @apply py-3 flex items-center;
+    }
+    
+    .burgerMenuLi>i {
+        @apply text-2xl mx-5 text-slate-400;
     }
 }
