@@ -6,3 +6,12 @@ export const checkResponse = (response) => {
 
   return response.json();
 };
+
+export const extractYear = (date) => {
+  if(date.split('/')[2] <= 30) {
+    return '20' + date.split('/')[2];
+  }
+  else {
+    return '19' + date.split('/')[2];
+  }
+}

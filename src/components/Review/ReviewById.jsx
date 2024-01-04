@@ -1,12 +1,16 @@
 import { useParams } from "react-router-dom";
+import NavBar from "../NavBar";
 
 export default function ReviewById() {
-    const params = useParams();
+  const params = useParams();
 
-    return (
-        <div>
+  return (
+    <>
+      <NavBar />
+      <div>
         <h1>ReviewById</h1>
         <p>Id: {params.id}</p>
-        </div>
-    )
+      </div>
+    </>
+  );
 }

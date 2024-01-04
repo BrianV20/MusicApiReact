@@ -13,7 +13,7 @@ export default function Main() {
 
   return (
     <>
-      {location.pathname !== '/SignIn' && <NavBar />}
+      {/* {location.pathname !== '/SignIn' && <NavBar />} */}
       
       <Routes>
         {/* MODIFICAR PARA QUE EL FOOTER SOLO APAREZCA EN PC */}
