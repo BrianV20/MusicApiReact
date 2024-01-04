@@ -22,4 +22,7 @@
     .burgerMenuLi>i {
         @apply text-2xl mx-5 text-slate-400;
     }
+    /* .signInImgShadow {
+        @apply relative before:absolute before:top-0 before:left-0 before:w-full before:h-full before:shadow-red-500 before:shadow- before:pointer-events-none;
+    } */
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../index.css";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
   const [isChecked, setIsChecked] = useState(false);
@@ -8,13 +9,15 @@ export default function NavBar() {
     setIsChecked(event.target.checked);
   };
 
+  const handleOverlayClick = () => {
+    setIsChecked(false);
+  };
+
   return (
     <>
+    {isChecked && <div onClick={handleOverlayClick}  className="fixed inset-0 bg-black opacity-70 z-10"></div>}
       <nav className="bg-orange-600">
-        <div className="text-white flex justify-between py-3 px-2 md:w-[70%] md:mx-auto">
-          {/* <a href="" className="focus:bg-slate-500">
-            <i className="fa-solid fa-bars text-xl flex items-center md:hidden peer/menuIcon"></i>
-          </a> */}
+        <div className="text-white flex justify-between py-3 px-2 md:w-[70%] md:mx-auto h-14">
 
           <input
             type="checkbox"
@@ -26,19 +29,17 @@ export default function NavBar() {
             htmlFor="menu"
             className={
               isChecked
-                ? "burgerMenuIconDefault fa-solid fa-xmark bg-pink-600 ml-2 px-2 rounded-md"
+                ? "burgerMenuIconDefault fa-solid fa-xmark bg-orange-600 ml-2 px-2 rounded-md"
                 : "burgerMenuIconDefault fa-solid fa-bars"
             }
           ></label>
           {/* acá estoy usando una funcion para manejar las clases del label en base a si el checkbox está check o no. Uso una funcion y no la clase peer de Tailwind, porque con esa clase no puedo desactivar clases del label en base a l estado del checkbox, solo puedo agregar clases, con una funcion en cambio le pongo x clases segun el estado del checkbox. */}
 
-          {/* <label htmlFor="menu" className="fa-solid fa-bars text-xl flex items-center md:hidden peer-checked/menuIcon:bg-red-700 cursor-pointer"></label> */}
-
-          <div className="peer-checked/menuCheckbox:translate-x-0 absolute inset-0 bg-orange-800 w-[70%] translate-x-[-150rem] pt-14 transition-all duration-300 ease-in-out">
+          <div className="peer-checked/menuCheckbox:translate-x-0 absolute inset-0 bg-[#2d4c8f] w-[70%] translate-x-[-150rem] pt-14 transition-all duration-300 ease-in-out z-20">
             <ul>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-house"></i>
-                <a href="#">Home</a>
+                <Link to='/'>Home</Link>
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-magnifying-glass"></i>
@@ -46,7 +47,7 @@ export default function NavBar() {
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-user"></i>
-                <a href="">Profile</a>
+                <Link to='/profile'>Profile</Link>
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-regular fa-clock"></i>
@@ -54,7 +55,7 @@ export default function NavBar() {
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-bars-staggered"></i>
-                <a href="">Reviews</a>
+                <Link to='/reviews'>Reviews</Link>
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-list"></i>
@@ -66,14 +67,14 @@ export default function NavBar() {
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
-                <a href="">Sign out</a>
+                <Link to='/SignIn'>Sign out</Link>
               </li>
             </ul>
           </div>
 
-          <h1 className="w-full text-2xl pl-5 flex items-center md:pl-4">
+          <Link to='/' className="w-full text-2xl pl-5 flex items-center md:pl-4">
             Popular
-          </h1>
+          </Link>
           <div className="hidden md:flex md:w-[100%] md:justify-evenly">
             <a href="#" className="navItemLg">
               Profile
@@ -81,9 +82,9 @@ export default function NavBar() {
             <a href="#" className="navItemLg">
               Albums
             </a>
-            <a href="#" className="navItemLg">
+            <Link to='/reviews' className="navItemLg">
               Reviews
-            </a>
+            </Link>
             <a href="#" className="navItemLg">
               Wishlist
             </a>
@@ -92,10 +93,10 @@ export default function NavBar() {
         </div>
 
         <div className="text-white px-2 flex justify-around text-center text-base md:w-[70%] md:mx-auto">
-          <a href="#" className="navItem">
+          <Link to='/' className="navItem">
             Releases
-          </a>
-          <a href="#" className="navItem">
+          </Link>
+          <a href="/reviews" className="navItem">
             Reviews
           </a>
           <a href="#" className="navItem">
