@@ -75,7 +75,7 @@ export default function NavBar() {
           <Link to='/' className="w-full text-2xl pl-5 flex items-center md:pl-4">
             Popular
           </Link>
-          <div className="hidden md:flex md:w-[100%] md:justify-evenly">
+          {/* <div className="hidden md:flex md:w-[100%] md:justify-evenly">
             <a href="#" className="navItemLg">
               Profile
             </a>
@@ -88,7 +88,7 @@ export default function NavBar() {
             <a href="#" className="navItemLg">
               Wishlist
             </a>
-          </div>
+          </div> */}
           <i className="fa-solid fa-magnifying-glass px-3 flex items-center"></i>
         </div>
 
@@ -96,9 +96,9 @@ export default function NavBar() {
           <Link to='/' className="navItem">
             Releases
           </Link>
-          <a href="/reviews" className="navItem">
+          <Link to='/reviews' className="navItem">
             Reviews
-          </a>
+          </Link>
           <a href="#" className="navItem">
             Lists
           </a>

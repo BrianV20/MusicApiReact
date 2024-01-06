@@ -1,19 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Review from "./Review";
 import NavBar from "../NavBar";
+import { getReviews } from "../../services/Review";
 
 export default function ReviewsCtnr() {
-  const [info, setInfo] = useState({
-    userId: "1",
-    releaseId: "3",
-    reviewText: "Muy bueno",
-  });
-  const [info2, setInfo2] = useState({
-    userId: "4",
-    releaseId: "32",
-    reviewText:
-      "Bastante bueno, el mejor de su discografía por lejos. Muy recomendado.",
-  });
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    getReviews()
+    .then((data) => {
+      setReviews(data);
+    })
+  }, []);
 
   return (
     <>
@@ -21,8 +19,16 @@ export default function ReviewsCtnr() {
       <div className="bg-slate-200 px-2 py-2 md:w-fit md:self-center">
         <h4>Popular reviews this week</h4>
         <div className="pt-1 flex gap-x-3 overflow-x-scroll whitespace-nowrap flex-col">
-          <Review reviewInfo={info} />
-          <Review reviewInfo={info2} />
+          {reviews.map((review) => {
+            let reviewInfo = {
+              reviewId: review.id,
+              href: "/reviews/" + review.id,
+              userId: review.userId,
+              releaseId: review.releaseId,
+              reviewText: review.reviewText,
+            };
+            return <Review key={review.id} reviewInfo={reviewInfo} />;
+          })}
         </div>
       </div>
     </>
