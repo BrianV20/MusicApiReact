@@ -28,7 +28,6 @@ export default function ReleaseById() {
         <Link to="/releases">
           <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
         </Link>
-        {/* <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i> */}
       </div>
 
       <div className="grid grid-cols-2 p-2 bg-slate-200">
