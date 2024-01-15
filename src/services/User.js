@@ -19,3 +19,15 @@ export const getUser = async (id) => {
   });
   return await checkResponse(response);
 };
+
+export const createUser = async (data) => {
+  const response = await fetch(`${baseUrl}/User`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+  });
+  return await checkResponse(response);
+}

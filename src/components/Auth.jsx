@@ -1,57 +1,165 @@
 import { useState } from "react";
+import { createUser, getUsers } from "../services/User";
 
 export default function Auth() {
   const [isSignUpShowing, setIsSignUpShowing] = useState(false);
+  const [emailEl, setEmailEl] = useState("");
+  const [usernameEl, setUsernameEl] = useState("");
+  const [passwordEl, setPasswordEl] = useState("");
+  const [confirmPasswordEl, setConfirmPasswordEl] = useState("");
+  const [rememeberMeEl, setRememberMeEl] = useState(false);
+  const [signInEmailEl, setSignInEmailEl] = useState("");
+  const [signInPasswordEl, setSignInPasswordEl] = useState("");
+  const [signInRememberMeEl, setSignInRememberMeEl] = useState(false);
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    if (!verifyFields()) {
+      console.log("Invalid fields");
+      return;
+    }
+
+    console.log("Valid fields");
+    registerUser();
+  };
+
+  const verifyFields = () => {
+    // email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailEl)) {
+      console.log("Invalid email format");
+      return false;
+    }
+
+    // username
+    if (usernameEl.length < 3) {
+      console.log("Username must be at least 3 characters long");
+      return false;
+    }
+
+    // password
+    if (passwordEl.length < 6) {
+      console.log("Password must be at least 6 characters long");
+      return false;
+    }
+    if(passwordEl !== confirmPasswordEl) {
+      console.log("Passwords do not match");
+      return false;
+    }
+
+    return true;
+  };
+
+  const registerUser = () => {
+    const user = {
+      username: usernameEl,
+      password: passwordEl,
+      email: emailEl,
+      img: "https://lastfm.freetls.fastly.net/i/u/770x0/637eb1786094ba74c8626f304b4cfc20.jpg#637eb1786094ba74c8626f304b4cfc20",
+      gender: 'F'
+    };
+
+    createUser(user);
+
+    console.log("User created");
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (!verifySignInFields()) {
+      console.log("Invalid fields");
+      return;
+    }
+
+    console.log("Valid fields");
+    if(!loginUser()) {
+      console.log("Invalid credentials");
+      return;
+    }
+    else {
+      console.log("Logged in");
+    }
+  };
+
+  const verifySignInFields = () => {
+    // email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(signInEmailEl)) {
+      console.log("Invalid email format");
+      return false;
+    }
+
+    // password
+    if (signInPasswordEl.length < 6) {
+      console.log("Password must be at least 6 characters long");
+      return false;
+    }
+
+    return true;
+  };
+
+  const loginUser = async () => {
+    const users = await getUsers();
+    const user = users.find(u => u.email === signInEmailEl && u.password === signInPasswordEl);
+    console.log("USER: ", user);
+    if(user != undefined) {
+      console.log("found");
+      return true;
+    }
+    console.log("not found");
+    return false;
+  };
+
 
   return (
     <>
-      {/* <div className="bg-green-300 min-h-[100vh]">
-            <img src="" alt="" />
-            <h1>Sign in</h1>
-            <form action="">
-                <input type="text" placeholder="Username or Email" />
-                <input type="password" placeholder="Password" />
-
-                <button>Sign up</button>
-                <button>Reset password</button>
-                <button>Sign in</button>
-            </form>
-        </div> */}
       <div className="flex bg-pink-300 flex-col h-screen overflow-hidden justify-center">
         {" "}
-        {/* <img className="h-[60%] min-w-[250vw] relative right-[50%] shadow-lg" src="https://a.ltrbxd.com/resized/sm/upload/44/up/dt/ca/mona-lisa-smile-1200-1200-675-675-crop-000000.jpg" alt="foto de fondo para el login" /> */}
-        {/* <div style={{backgroundImage: `url("https://a.ltrbxd.com/resized/sm/upload/44/up/dt/ca/mona-lisa-smile-1200-1200-675-675-crop-000000.jpg")` }} className="h-[100%] min-w-[250vw] relative right-[50%] bg-cover"></div> */}
         {isSignUpShowing ? (
           <div className="flex items-center justify-center w-[90%] mx-auto">
             <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Sign Up</h2>
-              <form className="flex flex-col">
+              <form className="flex flex-col" onSubmit={(e) => handleSignUp(e)}>
                 <input
                   type="email"
                   className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
                   placeholder="Email address"
+                  value={emailEl}
+                  onChange={(e) => setEmailEl(e.target.value)}
                 />
                 <input
                   type="text"
                   className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
                   placeholder="Username"
+                  value={usernameEl}
+                  onChange={(e) => setUsernameEl(e.target.value)}
                 />
                 <input
                   type="password"
                   className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
                   placeholder="Password"
+                  value={passwordEl}
+                  onChange={(e) => setPasswordEl(e.target.value)}
                 />
                 <input
                   type="password"
                   className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
                   placeholder="Repeat password"
+                  value={confirmPasswordEl}
+                  onChange={(e) => setConfirmPasswordEl(e.target.value)}
                 />
                 <div className="flex items-center justify-between flex-wrap">
                   <label
                     htmlFor="remember-me"
                     className="text-sm text-gray-900 cursor-pointer"
                   >
-                    <input type="checkbox" id="remember-me" className="mr-2" />
+                    <input
+                      type="checkbox"
+                      id="remember-me"
+                      className="mr-2"
+                      checked={rememeberMeEl}
+                      onChange={(e) => setRememberMeEl(e.target.checked)}
+                    />
                     Remember me
                   </label>
                   <p className="text-gray-900 mt-4">
@@ -69,8 +177,9 @@ export default function Auth() {
                 <button
                   type="submit"
                   className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150"
+                  // onClick={(e) => handleSignUp(e.target)}
                 >
-                  Login
+                  Sign Up
                 </button>
               </form>
             </div>
@@ -79,23 +188,33 @@ export default function Auth() {
           <div className="flex items-center justify-center w-[90%] mx-auto">
             <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Login</h2>
-              <form className="flex flex-col">
+              <form className="flex flex-col" onSubmit={(e) => handleLogin(e)}>
                 <input
                   type="email"
                   className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
                   placeholder="Email address"
+                  value={signInEmailEl}
+                  onChange={(e) => setSignInEmailEl(e.target.value)}
                 />
                 <input
                   type="password"
                   className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
                   placeholder="Password"
+                  value={signInPasswordEl}
+                  onChange={(e) => setSignInPasswordEl(e.target.value)}
                 />
                 <div className="flex items-center justify-between flex-wrap">
                   <label
                     htmlFor="remember-me"
                     className="text-sm text-gray-900 cursor-pointer"
                   >
-                    <input type="checkbox" id="remember-me" className="mr-2" />
+                    <input
+                      type="checkbox"
+                      id="remember-me"
+                      className="mr-2"
+                      checked={signInRememberMeEl}
+                      onChange={(e) => setSignInRememberMeEl(e.target.checked)}
+                    />
                     Remember me
                   </label>
                   <a
