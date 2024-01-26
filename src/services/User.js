@@ -31,3 +31,18 @@ export const createUser = async (data) => {
   });
   return await checkResponse(response);
 }
+
+export const login = async (data) => {
+  const response = await fetch(`${baseUrl}/User/login`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+  });
+  return await checkResponse(response);
+};
+
+//SE SUPONE QUE EL METODO LOGIN DEL UserController de la api genera el token y lo devuelve. Ver como seguir con esto, es decir
+// ver que hacer con el token y qué devuelve en sí el metodo.

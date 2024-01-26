@@ -1,8 +1,17 @@
 import FeaturedAlbumsCtnr from "./Release/FeaturedReleasesCtnr";
 import RecentAlbumsCtnr from "./Release/RecentReleasesCtnr";
 import NavBar from "./NavBar";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function HomeContent() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/SignIn");
+    }
+  }, []);
   return (
     <>
       <NavBar />

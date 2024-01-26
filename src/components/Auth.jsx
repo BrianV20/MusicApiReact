@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { createUser, getUsers } from "../services/User";
+import { createUser, getUsers, login } from "../services/User";
+import { useNavigate } from "react-router-dom";
 
 export default function Auth() {
   const [isSignUpShowing, setIsSignUpShowing] = useState(false);
@@ -11,6 +12,7 @@ export default function Auth() {
   const [signInEmailEl, setSignInEmailEl] = useState("");
   const [signInPasswordEl, setSignInPasswordEl] = useState("");
   const [signInRememberMeEl, setSignInRememberMeEl] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignUp = (e) => {
     e.preventDefault();
@@ -64,21 +66,17 @@ export default function Auth() {
     console.log("User created");
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (!verifySignInFields()) {
       console.log("Invalid fields");
       return;
     }
 
-    console.log("Valid fields");
-    if(!loginUser()) {
-      console.log("Invalid credentials");
-      return;
-    }
-    else {
-      console.log("Logged in");
-    }
+    var token = await loginUser();
+    localStorage.setItem('token', token.token);
+    console.log("Local storage token: ", localStorage.getItem("token"));
+    navigate("/");
   };
 
   const verifySignInFields = () => {
@@ -99,15 +97,11 @@ export default function Auth() {
   };
 
   const loginUser = async () => {
-    const users = await getUsers();
-    const user = users.find(u => u.email === signInEmailEl && u.password === signInPasswordEl);
-    console.log("USER: ", user);
-    if(user != undefined) {
-      console.log("found");
-      return true;
-    }
-    console.log("not found");
-    return false;
+    const token = await login({
+      email: signInEmailEl,
+      password: signInPasswordEl
+    });
+    return token;
   };
 
 
