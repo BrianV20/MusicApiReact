@@ -46,9 +46,6 @@ export default function FeaturedAlbumsCtnr() {
         <div className="px-2 py-2 md:w-fit md:self-center">
             <h4>Popular this week</h4>
             <div className="pt-1 flex gap-x-3 overflow-auto whitespace-nowrap">
-
-                {/* I M P O R T A N T E: SEGUIR CON REACT; CREAR LOS SERVICIOS, HACER LOS FETCH PARA PROBAR TODO, MEJORAR EL ESTILO DE LA PAGINA (HACERLA RESPONSIVE) Y DESPUES AGREGAR LO DE AUTENTICACION. */}
-
                 {releases.map((release) => {
                     let releaseInfo = {
                         href: '/releases/' + release.id,

@@ -6,6 +6,7 @@ import ReviewsCtnr from "./Review/ReviewsCtnr";
 import ReleaseById from "./Release/ReleaseById";
 import ReviewById from "./Review/ReviewById";
 import UserProfile from "./UserProfile";
+import Wishlist from "./WishList";
 import Auth from "./Auth";
 
 export default function Main() {
@@ -23,6 +24,7 @@ export default function Main() {
         <Route path="/reviews/*" element={<ReviewsCtnr />} />
         <Route path='reviews/:id' element={<ReviewById />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/WishList" element={<Wishlist />} />
         <Route path="/SignIn" element={<Auth />} />
         <Route path='*' element={<h1>404</h1>} />
       </Routes>

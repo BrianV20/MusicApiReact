@@ -11,6 +11,10 @@ export default function HomeContent() {
     if (!localStorage.getItem("token")) {
       navigate("/SignIn");
     }
+    else {
+      // localStorage.clear('token');
+      console.log("token", localStorage.getItem("token"));
+    }
   }, []);
   return (
     <>

@@ -51,7 +51,7 @@ export default function NavBar() {
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-regular fa-clock"></i>
-                <a href="">Wishlist</a>
+                <Link to='/WishList'>Wishlist</Link>
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-bars-staggered"></i>
@@ -75,20 +75,6 @@ export default function NavBar() {
           <Link to='/' className="w-full text-2xl pl-5 flex items-center md:pl-4">
             Popular
           </Link>
-          {/* <div className="hidden md:flex md:w-[100%] md:justify-evenly">
-            <a href="#" className="navItemLg">
-              Profile
-            </a>
-            <a href="#" className="navItemLg">
-              Albums
-            </a>
-            <Link to='/reviews' className="navItemLg">
-              Reviews
-            </Link>
-            <a href="#" className="navItemLg">
-              Wishlist
-            </a>
-          </div> */}
           <i className="fa-solid fa-magnifying-glass px-3 flex items-center"></i>
         </div>
 
@@ -106,7 +92,6 @@ export default function NavBar() {
             News
           </a>
         </div>
-        {/* <i className="fa-solid fa-compact-disc text-white"></i> */}
       </nav>
     </>
   );

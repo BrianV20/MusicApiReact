@@ -44,5 +44,17 @@ export const login = async (data) => {
   return await checkResponse(response);
 };
 
+export const GetUserFromToken = async () => {
+  const response = await fetch(`${baseUrl}/User/GetUserFromToken`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+  return await checkResponse(response);
+}
+
 //SE SUPONE QUE EL METODO LOGIN DEL UserController de la api genera el token y lo devuelve. Ver como seguir con esto, es decir
 // ver que hacer con el token y qué devuelve en sí el metodo.

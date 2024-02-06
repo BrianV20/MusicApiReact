@@ -8,6 +8,15 @@ export default function ReleaseById() {
   const params = useParams();
   const [release, setRelease] = useState({});
   const [artist, setArtist] = useState({});
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuVisible(!isMenuVisible);
+  };
+
+  const addToWatchlist = () => {
+    console.log('agregado a wishlist');
+  }
 
   useEffect(() => {
     getRelease(params.id)
@@ -60,6 +69,38 @@ export default function ReleaseById() {
           <p className="flex-1">generos... PENDIENTE</p>
         </div>
       </div>
+      <div className="px-2 py-5 text-lg text-white bg-[#0CE959] rounded-full absolute right-4 bottom-4 z-30">
+        <i
+          className="fa-solid fa-plus px-3 flex items-center"
+          onClick={toggleMenu}
+        ></i>
+      </div>
+
+      {isMenuVisible && (
+        <div className="bg-blue-500 inset-0 absolute h-[50%] translate-y-full transition-all duration-300 ease-in-out z-20">
+          {/* <div className={isMenuVisible ? 'bg-blue-500 inset-0 absolute h-[50%] transition-all duration-300 ease-in-out translate-y-full' : 'bg-blue-500 inset-0 absolute h-[60%] transition-all duration-300 ease-in-out hidden'}> */}
+          <div className="flex bg-red-400 justify-around text-center py-1">
+            <div>
+              <i className="fa-regular fa-eye text-2xl"></i>
+              <p>Watch</p>
+            </div>
+            <div>
+              <i className="fa-regular fa-heart text-2xl"></i>
+              <p>Like</p>
+            </div>
+            <div>
+              <i className="fa-regular fa-clock text-2xl" onClick={addToWatchlist}></i>
+              <p>Wishlist</p>
+            </div>
+          </div>
+          <div className="text-center">
+            agregar las estrellas para el rating
+          </div>
+        </div>
+      )}
+      {isMenuVisible && (
+        <div className="fixed inset-0 bg-black opacity-70 z-10" />
+      )}
     </>
   );
 }
