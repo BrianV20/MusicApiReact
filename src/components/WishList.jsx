@@ -12,7 +12,7 @@ export default function WishList() {
 
   const getIdsFromWishlist = async (ids) => {
     const idsToSave = ids.filter(id => id !== '');
-    if(idsToSave.length === 0) return;
+    if(idsToSave.length === 0 || idsToSave == null) return null;
     const promises = idsToSave.map((id) => getRelease(id));
     Promise.all(promises).then((releases) => setReleases(releases));
     console.log("idsToSave: ", idsToSave);
@@ -21,27 +21,25 @@ export default function WishList() {
 
   useEffect(() => {
     styles != null ? setStyles("w-[4.7rem] min-h-22") : "";
-    GetUserFromToken()
-      .then((data) => getWishlistByUser(data.id))
-      // .then((data) => console.log(data))
-      .then((data) => {
-        if (data != undefined) {
-          if(data.releasesIds != null && data.releasesIds != "") {
-            getIdsFromWishlist(data.releasesIds.split(","));
+    try {
+      GetUserFromToken()
+        .then((data) => getWishlistByUser(data.id))
+        // .then((data) => console.log(data))
+        .then((data) => {
+          // console.log("data: ", data)
+          if (data != undefined && data != null) {
+            if(data.releasesIds != null && data.releasesIds != "") {
+              getIdsFromWishlist(data.releasesIds.split(","));
+            }
           }
-        }
-        // console.log("data type: ", typeof data, "data content: ", data),
-        // setReleasesIds(data.releasesIds.split(","));
-        // const promises = data.releasesIds.split(",").map((releaseId, index) => (
-        //   releaseId != "" ? getRelease(releaseId) : promises.pop()
-        // ));
-        // Promise.all(promises).then((releases) => setReleases(releases));
-        //   "releasesIds type: ",
-        //   typeof releasesIds,
-        //   "releasesIds content: ",
-        //   releasesIds
-        // )
-      });
+          else {
+            console.log("No hay data")
+          }
+        });
+    }
+    catch (error) {
+      console.log("Error: ", error)
+    }
   }, []);
 
   return (
@@ -52,7 +50,7 @@ export default function WishList() {
         <div className="flex flex-wrap justify-center gap-2">
           {localStorage.getItem("token") ? (
             <div className="flex flex-wrap bg-red-300">
-              {console.log(releases)}
+              {/* {console.log(releases)} */}
               {releases.length > 0 ? (
                 <div>
                   {releases.map((release) => {
@@ -71,7 +69,7 @@ export default function WishList() {
                   })}
                 </div>
               ) : (
-                <div>todavia se esta cargando supongo</div>
+                <div>Wishlist vacia</div>
               )}
               {/* {releasesIds != null ? (
                 <div>

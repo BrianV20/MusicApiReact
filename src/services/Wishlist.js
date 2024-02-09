@@ -20,23 +20,24 @@ export const getWishlistByUser = async (id) => {
   return await checkResponse(response);
 };
 
-export const addReleaseToWishlist = async (Wishlist) => {
-  const response = await fetch(`${baseUrl}/WishList/AddRelease`, {
+export const addReleaseToWishlist = async (userAndReleaseId) => {
+  const response = await fetch(`${baseUrl}/WishList/AddRelease/${userAndReleaseId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(Wishlist),
+    body: JSON.stringify(userAndReleaseId),
   });
   return await checkResponse(response);
 };
 
-export const deleteReleaseFromWishlist = async (id) => {
-  const response = await fetch(`${baseUrl}/WishList/RemoveRelease${id}`, {
+export const deleteReleaseFromWishlist = async (userAndReleaseId) => {
+  const response = await fetch(`${baseUrl}/WishList/RemoveRelease/${userAndReleaseId}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
     },
+    body: JSON.stringify(userAndReleaseId),
   });
   return await checkResponse(response);
 };

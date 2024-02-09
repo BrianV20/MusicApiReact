@@ -3,19 +3,63 @@ import { getRelease } from "../../services/Release";
 import { useEffect, useState } from "react";
 import { getArtist } from "../../services/Artist";
 import { extractYear } from "../../utils/services";
+import { addReleaseToWishlist, deleteReleaseFromWishlist } from "../../services/Wishlist";
+// import { getWishlistByUser } from "../../services/Wishlist";
+import { GetUserFromToken } from "../../services/User";
+import { getWishlistByUser } from "../../services/Wishlist";
 
 export default function ReleaseById() {
   const params = useParams();
   const [release, setRelease] = useState({});
   const [artist, setArtist] = useState({});
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [userId, setUserId] = useState(0);
+  const [alreadyOnWishlist, setAlreadyOnWishlist] = useState(false);
+  const [wishlistIcons, setWishlistIcons] = useState([]);
 
   const toggleMenu = () => {
     setIsMenuVisible(!isMenuVisible);
   };
 
   const addToWatchlist = () => {
-    console.log('agregado a wishlist');
+    //SEGUIR CON ESTA FUNCION PARA AGREGAR A WISHLIST
+    if(wishlistIcons[1] == "fa-solid fa-plus") {
+      // significa que no esta en wishlist
+      console.log("no esta en wishlist por lo que se va a agregar a la wishlist");
+      addReleaseToWishlist(userId + "-" + params.id);
+      setWishlistIcons(["fa-solid fa-clock text-2xl", "fa-solid fa-minus"]);
+    }
+    else {
+      // significa que ya esta en wishlist
+      console.log("ya esta en wishlist por lo que no se puede agregar y se va a eliminar de la wishlist");
+      deleteReleaseFromWishlist(userId + "-" + params.id);
+      setWishlistIcons(["fa-regular fa-clock text-2xl", "fa-solid fa-plus"]);
+      return;
+    }
+  };
+
+  function checkIfTheReleaseIsOnWishlist() {
+    GetUserFromToken()
+      .then((data) => getWishlistByUser(data.id))
+      .then((datas) => {
+        // console.log(datas);
+        return datas.releasesIds;
+      })
+      .then((releasesIds) => {
+        const ids = releasesIds ? releasesIds.split(",") : "";
+        if (ids.includes(params.id)) {
+          // console.log("ya esta en wishlist");
+          setWishlistIcons(["fa-solid fa-clock text-2xl", "fa-solid fa-minus"]);
+          return true;
+        } else {
+          // console.log("no esta en wishlist");
+          setWishlistIcons([
+            "fa-regular fa-clock text-2xl",
+            "fa-solid fa-plus",
+          ]);
+          return false;
+        }
+      });
   }
 
   useEffect(() => {
@@ -29,6 +73,12 @@ export default function ReleaseById() {
           getArtist(artistId).then((data) => setArtist(data));
         }
       });
+
+    GetUserFromToken().then((data) => {
+      setUserId(data.id);
+    });
+
+    checkIfTheReleaseIsOnWishlist();
   }, []);
 
   return (
@@ -89,8 +139,11 @@ export default function ReleaseById() {
               <p>Like</p>
             </div>
             <div>
-              <i className="fa-regular fa-clock text-2xl" onClick={addToWatchlist}></i>
-              <p>Wishlist</p>
+              <div onClick={addToWatchlist}>
+                <i className={wishlistIcons[0]}></i>
+                <i className={wishlistIcons[1]}></i>
+                <p>Wishlist</p>
+              </div>
             </div>
           </div>
           <div className="text-center">

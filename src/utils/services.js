@@ -1,10 +1,11 @@
 export const checkResponse = (response) => {
   if (!response.ok) {
-    console.error(`HTTP error! status: ${response.status}, status text: ${response.statusText}, url: ${response.url}`);
-    return;
+    throw new Error(`HTTP error! status: ${response.status}`);
+  } else {
+    return response.text().then(text => {
+      return text ? JSON.parse(text) : {}
+    })
   }
-
-  return response.json();
 };
 
 export const extractYear = (date) => {

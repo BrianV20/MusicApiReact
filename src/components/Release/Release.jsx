@@ -6,7 +6,7 @@ export default function Release({ albumInfo, styles='' }) {
   return (
     <>
       <div className="border-2 border-slate-400 flex-none">
-        {/* <a href={href}> */}
+        {/* <div></div> */}
         <Link to={href}>
           {styles ? (
             <img src={src} alt={alt} className={styles} />
