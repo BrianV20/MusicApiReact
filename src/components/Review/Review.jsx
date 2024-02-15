@@ -20,7 +20,7 @@ export default function Review({ reviewInfo }) {
       setUser(data);
     });
 
-    getRating(releaseId, userId).then((data) => {
+    getRating(userId + "-" + releaseId).then((data) => {
       setRating(data);
     });
   }, []);
@@ -58,25 +58,25 @@ export default function Review({ reviewInfo }) {
         <div>
           <div>
             <p className="text-slate-500 text-[0.8rem]">
-              {rating && rating.ratingValue ? (
-                Number.isInteger(rating.ratingValue) ? (
-                  // si el numero es entero...
-                  Array.from({ length: rating.ratingValue }).map((_, i) => (
-                    <i key={i} className="fa-solid fa-star text-[#0CE959]" />
-                  ))
-                ) : (
-                  <>
-                    {Array.from({ length: Math.floor(rating.ratingValue) }).map(
-                      (_, i) => (
-                        <i key={i} className="fa-solid fa-star text-[#0CE959]" />
-                      )
-                    )}
-                    <i className="fa-regular fa-star-half-stroke text-[#0CE959]"></i>
-                  </>
-                )
+            {rating && rating.ratingValue ? (
+              // Number.isInteger(rating.ratingValue) ? (
+                rating.ratingValue.includes(".") == false ? (
+                Array.from({ length: rating.ratingValue }).map((_, i) => (
+                  <i key={i} className="fa-solid fa-star text-[#0CE959]" />
+                ))
               ) : (
-                ""
-              )}
+                <>
+                  {Array.from({ length: Math.floor(rating.ratingValue) }).map(
+                    (_, i) => (
+                      <i key={i} className="fa-solid fa-star text-[#0CE959]" />
+                    )
+                  )}
+                  <i className="fa-regular fa-star-half-stroke text-[#0CE959]"></i>
+                </>
+              )
+            ) : (
+              ""
+            )}
             </p>
           </div>
         </div>

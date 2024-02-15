@@ -23,7 +23,7 @@ export default function ReviewById() {
       getUser(data.userId).then((data) => {
         setUser(data);
       });
-      getRating(data.releaseId, data.userId).then((data) => {
+      getRating(data.userId + "-" + data.releaseId).then((data) => {
         setRating(data);
       });
     });
@@ -55,8 +55,9 @@ export default function ReviewById() {
               )}
             </div>
             {rating && rating.ratingValue ? (
-              Number.isInteger(rating.ratingValue) ? (
-                // si el numero es entero...
+              console.log("EL RATING VALUE DEL RELEASE: " + rating.ratingValue),
+              // Number.isInteger(rating.ratingValue) ? (
+                rating.ratingValue.includes(".") == false ? (
                 Array.from({ length: rating.ratingValue }).map((_, i) => (
                   <i key={i} className="fa-solid fa-star text-[#0CE959]" />
                 ))

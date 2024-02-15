@@ -7,9 +7,26 @@
 
 El proyecto está usando un sistema de autenticacion Basic, no JWT.
 
-💪  4) HACER LA FUNCIONALIDAD DE LA WISHLIST, HACER QUE EN LA VISTA DE CADA RELEASE SE PUEDAN AGREGAR A LA MISMA.
-5) HACER LA FUNCIONALIDAD DE Lists, HACER QUE LOS USUARIOS PUEDAN HACER LISTAS (QUE POR DEFECTO SERAN PUBLICAS, EN UN FUTURO PUEDO VER SI AGREGAR LA FUNCIONALIDAD DE PODER HACER LSITAS PRIVADAS).
-6) HACER LA FUNCIONALIDAD DE SETTINGS, PARA PODER CONFIGURAR DISTINTAS COSAS.
-7) SEGUIR CON LA VISTA DEL PERFIL.
+✔  4) HACER LA FUNCIONALIDAD DE LA WISHLIST, HACER QUE EN LA VISTA DE CADA RELEASE SE PUEDAN AGREGAR A LA MISMA.
+VER AL FINAL 5) HACER LA FUNCIONALIDAD DE Lists, HACER QUE LOS USUARIOS PUEDAN HACER LISTAS (QUE POR DEFECTO SERAN PUBLICAS, EN UN FUTURO PUEDO VER SI AGREGAR LA FUNCIONALIDAD DE PODER HACER LSITAS PRIVADAS).
+💪 5) SEGUIR CON LA VISTA DEL RELEASE, HACERLA DINAMICA Y HPONER LA OPCION PARA AGREGAR UNA RESEÑA.
+ 6) HACER LA FUNCIONALIDAD DE SETTINGS, PARA PODER CONFIGURAR DISTINTAS COSAS (como las pelis favs)
+ 7) SEGUIR CON LA VISTA DEL PERFIL.
 8) HACER LA FUNCIONALIDAD DE LA BUSQUEDA.
 10) Mas tarde seguir con la autorizacion, es decir, ver a qué vistas no se pueden acceder sin una sesion, para eso primero tengo que crear las vistas que se mostrarian si no se tiene una sesion iniciada. Esto dejarlo como algo extra para el final.
+
+
+
+FUNCIONES PRINCIPALES:
+- Poder crearte un usuario e iniciar sesion. LISTO
+- Tener una wishlist donde guardar los discos que quieras. LISTO
+- Tener una vista de los discos, otra de reseñas. LISTO
+- En la vista de un disco se debe poder agregarlo a la wishlist, ponerle un rating y hacerle una reseña. LISTO
+
+🐱‍👤🎶 - Se deben poder buscar releases. HACER UN componente SearchNavBar. EN PROGRESO
+
+- Debe haber una vista del perfil del usuario donde se debe poder cambiar la foto, el nombre de usuario, la contraseña y los discos favoritos (4). 
+
+- En la vista de perfil se debe poder ver los likes, reseñas y ratings del usuario.
+- Debe haber una opcion de "Opciones" donde poder configurar distintas cosas como cambiar la contraseña y nombre de usuario.
+- Hacer ciertas vistas para un usuario que no tiene una sesion iniciada, y que al querer ingresar o hacer algo que requiera de una sesion, redireccionarlo al formulario de inicio de sesion.

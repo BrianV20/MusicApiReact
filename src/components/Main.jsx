@@ -8,6 +8,7 @@ import ReviewById from "./Review/ReviewById";
 import UserProfile from "./UserProfile";
 import Wishlist from "./WishList";
 import Auth from "./Auth";
+import Search from "./Search";
 
 export default function Main() {
   const location = useLocation();
@@ -19,6 +20,7 @@ export default function Main() {
       <Routes>
         {/* MODIFICAR PARA QUE EL FOOTER SOLO APAREZCA EN PC */}
         <Route path="/" element={<HomeContent />} />
+        <Route path="/search" element={<Search />} />
         <Route path="/releases/*" element={<HomeContent />} />
         <Route path="/releases/:id" element={<ReleaseById />} />
         <Route path="/reviews/*" element={<ReviewsCtnr />} />

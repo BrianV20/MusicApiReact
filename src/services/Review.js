@@ -19,3 +19,15 @@ export const getReview = async (id) => {
   });
   return await checkResponse(response);
 };
+
+export const addReview = async (reviewInfo) => {
+  const response = await fetch(`${baseUrl}/Review/${reviewInfo}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(reviewInfo),
+  });
+  // return await checkResponse(response);
+  return await response;
+}

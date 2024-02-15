@@ -75,7 +75,9 @@ export default function NavBar() {
           <Link to='/' className="w-full text-2xl pl-5 flex items-center md:pl-4">
             Popular
           </Link>
-          <i className="fa-solid fa-magnifying-glass px-3 flex items-center"></i>
+          <Link to='/search' className="self-center">
+            <i className="fa-solid fa-magnifying-glass px-3 flex items-center"></i>
+          </Link>
         </div>
 
         <div className="text-white px-2 flex justify-around text-center text-base md:w-[70%] md:mx-auto">

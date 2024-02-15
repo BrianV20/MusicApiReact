@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { getArtist } from "../../services/Artist";
 import { extractYear } from "../../utils/services";
 import { addReleaseToWishlist, deleteReleaseFromWishlist } from "../../services/Wishlist";
-// import { getWishlistByUser } from "../../services/Wishlist";
 import { GetUserFromToken } from "../../services/User";
 import { getWishlistByUser } from "../../services/Wishlist";
+import { getRating, updateRating } from "../../services/Rating";
+import { addReview } from "../../services/Review";
+import swal from "sweetalert";
 
 export default function ReleaseById() {
   const params = useParams();
@@ -14,24 +16,32 @@ export default function ReleaseById() {
   const [artist, setArtist] = useState({});
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [userId, setUserId] = useState(0);
-  const [alreadyOnWishlist, setAlreadyOnWishlist] = useState(false);
+  // const [alreadyOnWishlist, setAlreadyOnWishlist] = useState(false);
   const [wishlistIcons, setWishlistIcons] = useState([]);
+  const [numberOfStars, setNumberOfStars] = useState(0.0);
+  const [menuStyles, setMenuStyles] = useState("");
 
   const toggleMenu = () => {
+    setMenuStyles(
+      "bg-gradient-to-b from-orange-200 to-orange-400 inset-0 absolute h-[50%] translate-y-full transition-all duration-300 ease-in-out z-20"
+    );
     setIsMenuVisible(!isMenuVisible);
   };
 
   const addToWatchlist = () => {
     //SEGUIR CON ESTA FUNCION PARA AGREGAR A WISHLIST
-    if(wishlistIcons[1] == "fa-solid fa-plus") {
+    if (wishlistIcons[1] == "fa-solid fa-plus") {
       // significa que no esta en wishlist
-      console.log("no esta en wishlist por lo que se va a agregar a la wishlist");
+      console.log(
+        "no esta en wishlist por lo que se va a agregar a la wishlist"
+      );
       addReleaseToWishlist(userId + "-" + params.id);
       setWishlistIcons(["fa-solid fa-clock text-2xl", "fa-solid fa-minus"]);
-    }
-    else {
+    } else {
       // significa que ya esta en wishlist
-      console.log("ya esta en wishlist por lo que no se puede agregar y se va a eliminar de la wishlist");
+      console.log(
+        "ya esta en wishlist por lo que no se puede agregar y se va a eliminar de la wishlist"
+      );
       deleteReleaseFromWishlist(userId + "-" + params.id);
       setWishlistIcons(["fa-regular fa-clock text-2xl", "fa-solid fa-plus"]);
       return;
@@ -62,6 +72,62 @@ export default function ReleaseById() {
       });
   }
 
+  const addStar = () => {
+    if (numberOfStars < 5) {
+      setNumberOfStars(parseFloat(numberOfStars) + 0.5);
+    }
+    console.log("agregar estrella");
+  };
+
+  const removeStar = () => {
+    if (numberOfStars > 0) {
+      setNumberOfStars(numberOfStars - 0.5);
+    }
+    console.log("quitar estrella");
+  };
+
+  const rateRelease = () => {
+    console.log("calificar release");
+    updateRating(userId + "-" + params.id + "-" + numberOfStars).then(
+      (data) => {
+        console.log(data);
+      }
+    );
+    // console.log("se le ha dado " + numberOfStars + " estrellas");
+  };
+
+  const reviewRelease = () => {
+    if (menuStyles.includes("translate-z-full")) {
+      setMenuStyles(
+        "bg-gradient-to-b from-orange-200 to-orange-400 inset-0 absolute h-[50%] translate-y-full transition-all duration-300 ease-in-out z-20"
+      );
+    } else {
+      setMenuStyles(
+        "bg-gradient-to-b from-orange-200 to-orange-400 inset-0 absolute h-[100%] translate-z-full transition-all duration-300 ease-in-out z-20"
+      );
+    }
+  };
+
+  const uploadReview = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const formJson = Object.fromEntries(formData.entries());
+    // console.log(formJson);
+
+    const response = addReview(userId + "-+-+-+-" + params.id + "-+-+-+-" + formJson.reviewText).then((data) => {
+      console.log(data);
+      if(!data.ok) {
+        swal("Error", "You already reviewed this release", "error");
+      }
+      else {
+        swal("Success", "Your review has been uploaded", "success");
+      }
+    });
+
+    // console.log("subir review");
+  };
+
   useEffect(() => {
     getRelease(params.id)
       .then((data) => {
@@ -69,14 +135,22 @@ export default function ReleaseById() {
         return data.artistId; // returns the artistId for the next .then
       })
       .then((artistId) => {
-        if (artistId) {
+        if(artistId) {
           getArtist(artistId).then((data) => setArtist(data));
         }
       });
 
-    GetUserFromToken().then((data) => {
-      setUserId(data.id);
-    });
+    GetUserFromToken()
+      .then((data) => {
+        setUserId(data.id);
+        return getRating(data.id + "-" + params.id);
+      })
+      .then((data) => {
+        console.log("data: ", data);
+        if(data.id != undefined) {
+          setNumberOfStars(data.ratingValue);
+        }
+      }); //ARREGLAR ESTO PARA QUE NO DE ERROR CUANDO NO HAYA RATING
 
     checkIfTheReleaseIsOnWishlist();
   }, []);
@@ -127,9 +201,9 @@ export default function ReleaseById() {
       </div>
 
       {isMenuVisible && (
-        <div className="bg-blue-500 inset-0 absolute h-[50%] translate-y-full transition-all duration-300 ease-in-out z-20">
+        <div className={menuStyles}>
           {/* <div className={isMenuVisible ? 'bg-blue-500 inset-0 absolute h-[50%] transition-all duration-300 ease-in-out translate-y-full' : 'bg-blue-500 inset-0 absolute h-[60%] transition-all duration-300 ease-in-out hidden'}> */}
-          <div className="flex bg-red-400 justify-around text-center py-1">
+          <div className="flex justify-around text-center py-1">
             <div>
               <i className="fa-regular fa-eye text-2xl"></i>
               <p>Watch</p>
@@ -137,6 +211,10 @@ export default function ReleaseById() {
             <div>
               <i className="fa-regular fa-heart text-2xl"></i>
               <p>Like</p>
+            </div>
+            <div onClick={reviewRelease}>
+              <i className="fa-solid fa-plus text-2xl"></i>
+              <p>Review</p>
             </div>
             <div>
               <div onClick={addToWatchlist}>
@@ -146,9 +224,45 @@ export default function ReleaseById() {
               </div>
             </div>
           </div>
-          <div className="text-center">
-            agregar las estrellas para el rating
+          <div className="text-2xl my-4 mx-2 border-2 border-black flex justify-center text-center">
+            <div className="flex border-2 border-blue-400 w-[40%] justify-center">
+              <div className="">
+                <i className="fa-solid fa-chevron-up" onClick={addStar}></i>
+                <p>{numberOfStars ? numberOfStars : 0}</p>
+                <i
+                  className="fa-solid fa-chevron-down"
+                  onClick={removeStar}
+                ></i>
+              </div>
+              <div className="self-center ml-2">
+                <i className="fa-solid fa-star text-[#0CE959]"></i>
+              </div>
+              {/* <i
+              className="fa-solid fa-times text-2xl"
+              onClick={toggleMenu}
+              ></i> */}
+            </div>
+            <div className="w-[40%] self-center">
+              <button
+                className="bg-gray-300 h-10 w-[5rem] m-auto"
+                onClick={rateRelease}
+              >
+                Rate
+              </button>
+            </div>
           </div>
+          {menuStyles.includes("translate-z-full") && (
+            <div className="bg-white p-2 m-2">
+              <form onSubmit={uploadReview}> //VER QUE PASA AL SUBIR LA REVIEW QUE ME TIRA UN ERROR DE VALIDACION
+                <textarea
+                  className="w-full h-20"
+                  placeholder="Write your review here..."
+                  name="reviewText"
+                ></textarea>
+                <button type="submit" className="bg-gray-300 h-10 w-full">Submit</button>
+              </form>
+            </div>
+          )}
         </div>
       )}
       {isMenuVisible && (
