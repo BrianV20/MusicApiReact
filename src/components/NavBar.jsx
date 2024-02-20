@@ -63,7 +63,7 @@ export default function NavBar() {
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-gear"></i>
-                <a href="">Settings</a>
+                <Link to="/settings">Settings</Link>
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>

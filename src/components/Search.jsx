@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { getReleases } from "../services/Release";
 import { getArtists } from "../services/Artist";
 import { getReviews } from "../services/Review";
+import Release from "./Release/Release";
+import Review from "./Review/Review";
+import Artist from "./Artist/Artist";
 
 export default function Search() {
   const [textToSearch, setTextToSearch] = useState("");
@@ -71,42 +74,68 @@ export default function Search() {
       {searchRequest == true ? (
         <div>
           <div className="text-3xl bg-yellow-200 w-fit p-2">Releases</div>
-          <div>
+          <div className="flex flex-wrap">
             {releases.map((rel) => {
-              if(rel.title.toLowerCase().includes(textToSearch.toLowerCase())) {
-                return (
-                  <div className="bg-red-400 mx-3 my-2" key={rel.id}>
-                    <p>{rel.title}</p>
-                  </div>
-                );
+              if (
+                rel.title.toLowerCase().includes(textToSearch.toLowerCase())
+              ) {
+                let releaseInfo = {
+                  href: "/releases/" + rel.id,
+                  src: rel.cover,
+                  alt: rel.title,
+                };
+                return <Release key={rel.id} albumInfo={releaseInfo} />;
+                // return (
+                //   <div className="bg-red-400 mx-3 my-2" key={rel.id}>
+                //     <p>{rel.title}</p>
+                //   </div>
+                // );
               }
             })}
           </div>
 
           <div className="text-3xl bg-yellow-200 w-fit p-2">Artists</div>
-          <div>
-          {artists.map((art) => {
-              if(art.name.toLowerCase().includes(textToSearch.toLowerCase())) {
-                return (
-                  <div className="bg-red-400 mx-3 my-2" key={art.id}>
-                    <p>{art.name}</p>
-                  </div>
-                );
+          <div className="flex flex-wrap">
+            {artists.map((art) => {
+              if (art.name.toLowerCase().includes(textToSearch.toLowerCase())) {
+                let artInfo = {
+                  href: "/artists/" + art.id,
+                  src: art.img,
+                  name: art.name,
+                };
+                return <Artist key={art.id} artistInfo={artInfo} />;
+                // return (
+                //   <div className="bg-red-400 mx-3 my-2" key={art.id}>
+                //     <p>{art.name}</p>
+                //   </div>
+                // );
               }
             })}
           </div>
 
           <div className="text-3xl bg-yellow-200 w-fit p-2">Reviews</div>
           <div>
-          {reviews.map((rev) => {
-            // console.log("REVIEW NRO " + rev.id + ": " + Object.keys(rev));
-            if(rev.reviewText.toLowerCase().includes(textToSearch.toLowerCase())) {
-              return (
-                <div className="bg-red-400 mx-3 my-2" key={rev.id}>
-                  <p>{rev.reviewText}</p>
-                </div>
-              );
-            }
+            {reviews.map((rev) => {
+              // console.log("REVIEW NRO " + rev.id + ": " + Object.keys(rev));
+              if (
+                rev.reviewText
+                  .toLowerCase()
+                  .includes(textToSearch.toLowerCase())
+              ) {
+                let reviewInfo = {
+                  reviewId: rev.id,
+                  href: "/reviews/" + rev.id,
+                  userId: rev.userId,
+                  releaseId: rev.releaseId,
+                  reviewText: rev.reviewText,
+                };
+                return <Review key={rev.id} reviewInfo={reviewInfo} />;
+                // return (
+                //   <div className="bg-red-400 mx-3 my-2" key={rev.id}>
+                //     <p>{rev.reviewText}</p>
+                //   </div>
+                // );
+              }
             })}
           </div>
         </div>

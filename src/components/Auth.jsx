@@ -58,7 +58,8 @@ export default function Auth() {
       password: passwordEl,
       email: emailEl,
       img: "https://lastfm.freetls.fastly.net/i/u/770x0/637eb1786094ba74c8626f304b4cfc20.jpg#637eb1786094ba74c8626f304b4cfc20",
-      gender: 'F'
+      gender: 'F',
+      FavoriteReleases: ''
     };
 
     createUser(user);

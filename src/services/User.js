@@ -32,6 +32,18 @@ export const createUser = async (data) => {
   return await checkResponse(response);
 }
 
+export const updateUser = async (id, data) => {
+  const response = await fetch(`${baseUrl}/User/${id}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({id, ...data})
+  });
+  return await checkResponse(response);
+}
+
 export const login = async (data) => {
   const response = await fetch(`${baseUrl}/User/login`, {
     method: "POST",

@@ -1,6 +1,4 @@
-import NavBar from "./NavBar";
-import Footer from "./Footer";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import HomeContent from "./HomeContent";
 import ReviewsCtnr from "./Review/ReviewsCtnr";
 import ReleaseById from "./Release/ReleaseById";
@@ -9,9 +7,11 @@ import UserProfile from "./UserProfile";
 import Wishlist from "./WishList";
 import Auth from "./Auth";
 import Search from "./Search";
+import ArtistById from "./Artist/ArtistById";
+import Settings from "./Setings";
 
 export default function Main() {
-  const location = useLocation();
+  // const location = useLocation();
 
   return (
     <>
@@ -25,9 +25,11 @@ export default function Main() {
         <Route path="/releases/:id" element={<ReleaseById />} />
         <Route path="/reviews/*" element={<ReviewsCtnr />} />
         <Route path='reviews/:id' element={<ReviewById />} />
+        <Route path="/artists/:id" element={<ArtistById />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/WishList" element={<Wishlist />} />
         <Route path="/SignIn" element={<Auth />} />
+        <Route path="/settings" element={<Settings />} />
         <Route path='*' element={<h1>404</h1>} />
       </Routes>
 

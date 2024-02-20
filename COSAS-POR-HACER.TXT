@@ -22,11 +22,14 @@ FUNCIONES PRINCIPALES:
 - Tener una wishlist donde guardar los discos que quieras. LISTO
 - Tener una vista de los discos, otra de reseñas. LISTO
 - En la vista de un disco se debe poder agregarlo a la wishlist, ponerle un rating y hacerle una reseña. LISTO
+- Se deben poder buscar releases. HACER UN componente SearchNavBar. LISTO
+- Hacer una vista para el artista, donde se muestren sus releases y su foto. LISTO
+- Debe haber una vista del perfil del usuario. LISTO
+- En la vista de opciones se debe poder cambiar la foto de perfil, el nombre de usuario y los discos favs.
+- Debe haber una opcion de "Opciones" donde poder configurar distintas cosas como cambiar la contraseña y nombre de usuario. LISTO
 
-🐱‍👤🎶 - Se deben poder buscar releases. HACER UN componente SearchNavBar. EN PROGRESO
+🐱‍👤🎶 - En la vista de perfil se debe poder ver los likes, reseñas y ratings del usuario. EN PROGRESO
 
-- Debe haber una vista del perfil del usuario donde se debe poder cambiar la foto, el nombre de usuario, la contraseña y los discos favoritos (4). 
+- hacer el tema del direccionamiento de la pagina, que cuando aprete la flecha de atras me lleve atras y no a /releases, el tema de los links (si hago click en el user de una review me deberia llevar a su perfil), etc.
 
-- En la vista de perfil se debe poder ver los likes, reseñas y ratings del usuario.
-- Debe haber una opcion de "Opciones" donde poder configurar distintas cosas como cambiar la contraseña y nombre de usuario.
 - Hacer ciertas vistas para un usuario que no tiene una sesion iniciada, y que al querer ingresar o hacer algo que requiera de una sesion, redireccionarlo al formulario de inicio de sesion.
