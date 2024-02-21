@@ -56,6 +56,18 @@ export const login = async (data) => {
   return await checkResponse(response);
 };
 
+export const LikeRelease = async (data) => {
+  const response = await fetch(`${baseUrl}/User/${data}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+  return await checkResponse(response);
+};
+
 export const GetUserFromToken = async () => {
   const response = await fetch(`${baseUrl}/User/GetUserFromToken`, {
     method: "GET",

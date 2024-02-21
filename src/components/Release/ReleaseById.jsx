@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getArtist } from "../../services/Artist";
 import { extractYear } from "../../utils/services";
 import { addReleaseToWishlist, deleteReleaseFromWishlist } from "../../services/Wishlist";
-import { GetUserFromToken } from "../../services/User";
+import { GetUserFromToken, LikeRelease } from "../../services/User";
 import { getWishlistByUser } from "../../services/Wishlist";
 import { getRating, updateRating } from "../../services/Rating";
 import { addReview } from "../../services/Review";
@@ -108,6 +108,15 @@ export default function ReleaseById() {
     }
   };
 
+  const likeRelease = () => {
+    var likeInfo = userId + "+-+-+-" + params.id;
+    var result = LikeRelease(likeInfo);
+    if(result != null) {
+      console.log("BIEN");
+    }
+    console.log("MAL");
+  };
+ 
   const uploadReview = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -208,7 +217,7 @@ export default function ReleaseById() {
               <i className="fa-regular fa-eye text-2xl"></i>
               <p>Watch</p>
             </div>
-            <div>
+            <div onClick={likeRelease}>
               <i className="fa-regular fa-heart text-2xl"></i>
               <p>Like</p>
             </div>
