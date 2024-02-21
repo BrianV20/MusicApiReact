@@ -1,9 +1,16 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "./NavBar";
-import { GetUserFromToken } from "../services/User";
+import { GetUserFromToken, GetLikedReleases } from "../services/User";
+import { getReviews } from "../services/Review";
+import { getRatings } from "../services/Rating";
+import { getWishlistByUser } from "../services/Wishlist";
 
 export default function UserProfile() {
   const [user, setUser] = useState({});
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
+  const [numberOfReviews, setNumberOfReviews] = useState(0);
+  const [numberOfRatings, setNumberOfRatings] = useState(0);
+  const [numberOfReleasesOnWishlist, setNumberOfReleasesOnWishlist] = useState(0);
   // const fileInputRef = useRef(null);
 
   // const addFavorites = () => {
@@ -23,7 +30,26 @@ export default function UserProfile() {
   // }
 
   useEffect(() => {
-    GetUserFromToken().then((data) => setUser(data));
+    GetUserFromToken().then((data) => {
+      setUser(data)
+      GetLikedReleases(data.id).then((likes) => {
+        const number = likes.split(',');
+        setNumberOfLikes(number.length);
+      });
+      getReviews().then((reviews) => {
+        const number = (reviews.filter(r => r.userId == data.id)).length;
+        setNumberOfReviews(number);
+      });
+      getRatings().then((ratings) => {
+        const number = (ratings.filter(r => r.userId == data.id)).length;
+        setNumberOfRatings(number);
+      });
+      getWishlistByUser(data.id).then((wishlist) => {
+        const number = (wishlist.releasesIds.split(',')).length;
+        // console.log(wishlist.releasesIds.split(','));
+        setNumberOfReleasesOnWishlist(number-1);
+      })
+    });
   }, []);
 
   return (
@@ -56,16 +82,15 @@ export default function UserProfile() {
           <div>actividad reciente</div>
         </div>
 
-        <div>Ratings</div>
-
         <div className="px-2 border-t-2 border-red-500 pt-2">
           {/* Other options */}
           <ul>
-            <li>Releases</li>
-            <li>Reviews</li>
+            <li>Ratings - {numberOfRatings}</li>
+            <li>Reviews - {numberOfReviews}</li>
+            <li>Likes - {numberOfLikes}</li>
+            <li>Wishlist - {numberOfReleasesOnWishlist}</li>
+            {/* <li>Releases</li> */}
             <li>Lists</li>
-            <li>Wishlist</li>
-            <li>Likes</li>
           </ul>
         </div>
       </div>

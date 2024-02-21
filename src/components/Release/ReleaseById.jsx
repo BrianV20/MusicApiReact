@@ -3,8 +3,15 @@ import { getRelease } from "../../services/Release";
 import { useEffect, useState } from "react";
 import { getArtist } from "../../services/Artist";
 import { extractYear } from "../../utils/services";
-import { addReleaseToWishlist, deleteReleaseFromWishlist } from "../../services/Wishlist";
-import { GetUserFromToken, LikeRelease } from "../../services/User";
+import {
+  addReleaseToWishlist,
+  deleteReleaseFromWishlist,
+} from "../../services/Wishlist";
+import {
+  GetUserFromToken,
+  LikeRelease,
+  GetLikedReleases,
+} from "../../services/User";
 import { getWishlistByUser } from "../../services/Wishlist";
 import { getRating, updateRating } from "../../services/Rating";
 import { addReview } from "../../services/Review";
@@ -20,6 +27,7 @@ export default function ReleaseById() {
   const [wishlistIcons, setWishlistIcons] = useState([]);
   const [numberOfStars, setNumberOfStars] = useState(0.0);
   const [menuStyles, setMenuStyles] = useState("");
+  const [likeStyle, setLikeStyle] = useState("fa-regular fa-heart text-2xl");
 
   const toggleMenu = () => {
     setMenuStyles(
@@ -72,6 +80,16 @@ export default function ReleaseById() {
       });
   }
 
+  const checkIfReleaseIsAlreadyLiked = async () => {
+    const data = await GetUserFromToken();
+    const likedReleases = await GetLikedReleases(data.id);
+    console.log("LOS LIKED RELEASES: " + likedReleases);
+    if(likedReleases.includes(params.id + ",")) {
+      console.log("YA LO TEINE");
+      setLikeStyle('fa-solid fa-heart text-2xl');
+    }
+  };
+
   const addStar = () => {
     if (numberOfStars < 5) {
       setNumberOfStars(parseFloat(numberOfStars) + 0.5);
@@ -111,12 +129,18 @@ export default function ReleaseById() {
   const likeRelease = () => {
     var likeInfo = userId + "+-+-+-" + params.id;
     var result = LikeRelease(likeInfo);
-    if(result != null) {
+    if (result != null) {
       console.log("BIEN");
     }
     console.log("MAL");
+    if(likeStyle == 'fa-regular fa-heart text-2xl') {
+      setLikeStyle('fa-solid fa-heart text-2xl')
+    }
+    else{
+      setLikeStyle('fa-regular fa-heart text-2xl')
+    }
   };
- 
+
   const uploadReview = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -124,12 +148,13 @@ export default function ReleaseById() {
     const formJson = Object.fromEntries(formData.entries());
     // console.log(formJson);
 
-    const response = addReview(userId + "-+-+-+-" + params.id + "-+-+-+-" + formJson.reviewText).then((data) => {
+    const response = addReview(
+      userId + "-+-+-+-" + params.id + "-+-+-+-" + formJson.reviewText
+    ).then((data) => {
       console.log(data);
-      if(!data.ok) {
+      if (!data.ok) {
         swal("Error", "You already reviewed this release", "error");
-      }
-      else {
+      } else {
         swal("Success", "Your review has been uploaded", "success");
       }
     });
@@ -144,7 +169,7 @@ export default function ReleaseById() {
         return data.artistId; // returns the artistId for the next .then
       })
       .then((artistId) => {
-        if(artistId) {
+        if (artistId) {
           getArtist(artistId).then((data) => setArtist(data));
         }
       });
@@ -156,12 +181,13 @@ export default function ReleaseById() {
       })
       .then((data) => {
         console.log("data: ", data);
-        if(data.id != undefined) {
+        if (data.id != undefined) {
           setNumberOfStars(data.ratingValue);
         }
-      }); //ARREGLAR ESTO PARA QUE NO DE ERROR CUANDO NO HAYA RATING
+      });
 
     checkIfTheReleaseIsOnWishlist();
+    checkIfReleaseIsAlreadyLiked();
   }, []);
 
   return (
@@ -218,7 +244,7 @@ export default function ReleaseById() {
               <p>Watch</p>
             </div>
             <div onClick={likeRelease}>
-              <i className="fa-regular fa-heart text-2xl"></i>
+              <i className={likeStyle}></i>
               <p>Like</p>
             </div>
             <div onClick={reviewRelease}>
@@ -262,13 +288,18 @@ export default function ReleaseById() {
           </div>
           {menuStyles.includes("translate-z-full") && (
             <div className="bg-white p-2 m-2">
-              <form onSubmit={uploadReview}> //VER QUE PASA AL SUBIR LA REVIEW QUE ME TIRA UN ERROR DE VALIDACION
+              <form onSubmit={uploadReview}>
+                {" "}
+                //VER QUE PASA AL SUBIR LA REVIEW QUE ME TIRA UN ERROR DE
+                VALIDACION
                 <textarea
                   className="w-full h-20"
                   placeholder="Write your review here..."
                   name="reviewText"
                 ></textarea>
-                <button type="submit" className="bg-gray-300 h-10 w-full">Submit</button>
+                <button type="submit" className="bg-gray-300 h-10 w-full">
+                  Submit
+                </button>
               </form>
             </div>
           )}

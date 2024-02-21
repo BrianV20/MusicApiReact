@@ -68,6 +68,17 @@ export const LikeRelease = async (data) => {
   return await checkResponse(response);
 };
 
+export const GetLikedReleases = async (userId) => {
+  const response = await fetch(`${baseUrl}/User/GetLikedReleasesByUserId/${userId}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+  return await checkResponse(response);
+}
+
 export const GetUserFromToken = async () => {
   const response = await fetch(`${baseUrl}/User/GetUserFromToken`, {
     method: "GET",
