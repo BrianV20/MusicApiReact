@@ -28,10 +28,9 @@ FUNCIONES PRINCIPALES:
 - En la vista de opciones se debe poder cambiar la foto de perfil, el nombre de usuario y los discos favs.
 - Debe haber una opcion de "Opciones" donde poder configurar distintas cosas como cambiar la contraseña y nombre de usuario. LISTO
 - En la vista de perfil se debe poder ver los likes, reseñas y ratings del usuario. LISTO
+- hacer el tema del direccionamiento de la pagina, que cuando aprete la flecha de atras me lleve atras y no a /releases, el tema de los links (si hago click en el user de una review me deberia llevar a su perfil), etc. LISTO
 
-🐱‍👤🎶 - hacer el tema del direccionamiento de la pagina, que cuando aprete la flecha de atras me lleve atras y no a /releases, el tema de los links (si hago click en el user de una review me deberia llevar a su perfil), etc.
-
-- Terminar vista de ReleaseById (se deberian mostrar bien sus ratings y sus reviews, ademas de mostrar los otros releases del artista si es que tiene.) y vista de ArtistById.
+🐱‍👤🎶 - Terminar vista de ReleaseById (se deberian mostrar bien sus ratings y sus reviews, ademas de mostrar los otros releases del artista si es que tiene.) y vista de ArtistById.
 
 - Hacer ciertas vistas para un usuario que no tiene una sesion iniciada, y que al querer ingresar o hacer algo que requiera de una sesion, redireccionarlo al formulario de inicio de sesion.
 

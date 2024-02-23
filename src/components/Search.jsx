@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getReleases } from "../services/Release";
 import { getArtists } from "../services/Artist";
 import { getReviews } from "../services/Review";
@@ -13,6 +13,8 @@ export default function Search() {
   const [artists, setArtists] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [searchRequest, setSearchRequest] = useState(false);
+  const navigate = useNavigate();
+
 
   const handleSearchChange = (e) => {
     setTextToSearch(e.target.value);
@@ -47,9 +49,11 @@ export default function Search() {
   return (
     <>
       <div className="bg-blue-400 flex">
-        <Link to="/releases">
+        {/* <Link to="/releases"> */}
+        <div onClick={() => navigate(-1)}>
           <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
-        </Link>
+        </div>
+        {/* </Link> */}
         <div className="flex items-center mx-2">
           <div className="">
             <div className="flex">

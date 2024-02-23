@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getRelease } from "../../services/Release";
 import { useState, useEffect } from "react";
 import { extractYear } from "../../utils/services";
@@ -10,6 +10,7 @@ export default function Review({ reviewInfo }) {
   const [release, setRelease] = useState([]);
   const [user, setUser] = useState([]);
   const [rating, setRating] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     getRelease(releaseId).then((data) => {
@@ -27,7 +28,8 @@ export default function Review({ reviewInfo }) {
 
   return (
     <div className="border-2 border-t-slate-400 w-full pt-3 pb-2 h-[14rem] overflow-y-hidden">
-      <Link to={"/reviews/" + reviewId}>
+      {/* <Link to={"/reviews/" + reviewId}> */}
+      <div onClick={() => navigate(`/reviews/${reviewId}`)}>
         <div className="flex flex-wrap justify-between">
           <div className="flex items-baseline w-[50%] break-words flex-wrap">
             <p className="font-semibold">{release.title}</p>
@@ -58,25 +60,28 @@ export default function Review({ reviewInfo }) {
         <div>
           <div>
             <p className="text-slate-500 text-[0.8rem]">
-            {rating && rating.ratingValue ? (
-              // Number.isInteger(rating.ratingValue) ? (
+              {rating && rating.ratingValue ? (
+                // Number.isInteger(rating.ratingValue) ? (
                 rating.ratingValue.includes(".") == false ? (
-                Array.from({ length: rating.ratingValue }).map((_, i) => (
-                  <i key={i} className="fa-solid fa-star text-[#0CE959]" />
-                ))
+                  Array.from({ length: rating.ratingValue }).map((_, i) => (
+                    <i key={i} className="fa-solid fa-star text-[#0CE959]" />
+                  ))
+                ) : (
+                  <>
+                    {Array.from({ length: Math.floor(rating.ratingValue) }).map(
+                      (_, i) => (
+                        <i
+                          key={i}
+                          className="fa-solid fa-star text-[#0CE959]"
+                        />
+                      )
+                    )}
+                    <i className="fa-regular fa-star-half-stroke text-[#0CE959]"></i>
+                  </>
+                )
               ) : (
-                <>
-                  {Array.from({ length: Math.floor(rating.ratingValue) }).map(
-                    (_, i) => (
-                      <i key={i} className="fa-solid fa-star text-[#0CE959]" />
-                    )
-                  )}
-                  <i className="fa-regular fa-star-half-stroke text-[#0CE959]"></i>
-                </>
-              )
-            ) : (
-              ""
-            )}
+                ""
+              )}
             </p>
           </div>
         </div>
@@ -91,7 +96,8 @@ export default function Review({ reviewInfo }) {
             {reviewText}
           </p>
         </div>
-      </Link>
+        {/* </Link> */}
+      </div>
     </div>
   );
 }

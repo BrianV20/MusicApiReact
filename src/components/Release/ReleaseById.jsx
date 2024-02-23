@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getRelease } from "../../services/Release";
 import { useEffect, useState } from "react";
 import { getArtist } from "../../services/Artist";
@@ -28,6 +28,7 @@ export default function ReleaseById() {
   const [numberOfStars, setNumberOfStars] = useState(0.0);
   const [menuStyles, setMenuStyles] = useState("");
   const [likeStyle, setLikeStyle] = useState("fa-regular fa-heart text-2xl");
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setMenuStyles(
@@ -84,9 +85,9 @@ export default function ReleaseById() {
     const data = await GetUserFromToken();
     const likedReleases = await GetLikedReleases(data.id);
     console.log("LOS LIKED RELEASES: " + likedReleases);
-    if(likedReleases.includes(params.id + ",")) {
+    if (likedReleases.includes(params.id + ",")) {
       console.log("YA LO TEINE");
-      setLikeStyle('fa-solid fa-heart text-2xl');
+      setLikeStyle("fa-solid fa-heart text-2xl");
     }
   };
 
@@ -133,11 +134,10 @@ export default function ReleaseById() {
       console.log("BIEN");
     }
     console.log("MAL");
-    if(likeStyle == 'fa-regular fa-heart text-2xl') {
-      setLikeStyle('fa-solid fa-heart text-2xl')
-    }
-    else{
-      setLikeStyle('fa-regular fa-heart text-2xl')
+    if (likeStyle == "fa-regular fa-heart text-2xl") {
+      setLikeStyle("fa-solid fa-heart text-2xl");
+    } else {
+      setLikeStyle("fa-regular fa-heart text-2xl");
     }
   };
 
@@ -192,16 +192,18 @@ export default function ReleaseById() {
 
   return (
     <>
-      <div className="bg-blue-400">
-        <Link to="/releases">
+      <div className="bg-blue-400" onClick={() => navigate(-1)}>
+        <div >
           <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
-        </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 p-2 bg-slate-200">
         <div>
           <h2 className="text-2xl font-semibold">{release.title}</h2>
-          <p className="text-slate-500 mt-3 mb-1">By: {artist.name}</p>
+          <Link to={`/artists/${artist.id}`}>
+            <p className="text-slate-500 mt-3 mb-1">By: {artist.name}</p>
+          </Link>
           {release.releaseDate && typeof release.releaseDate === "string" ? (
             <p className="text-slate-500">{extractYear(release.releaseDate)}</p>
           ) : (

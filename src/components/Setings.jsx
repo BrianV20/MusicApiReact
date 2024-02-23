@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { GetUserFromToken } from "../services/User";
 import { updateUser } from "../services/User";
@@ -8,6 +8,7 @@ export default function Settings() {
   const [options, setOptions] = useState(["Profile", "Auth"]);
   const [selectedOption, setSelectedOption] = useState("Profile");
   const [user, setUser] = useState({});
+  const navigate = useNavigate();
   // const [selectedFile, setSelectedFile] = useState(null);
 
   const handleSelectOption = (item) => {
@@ -58,9 +59,11 @@ export default function Settings() {
   return (
     <>
       <div className="bg-blue-400">
-        <Link to="/releases">
+        {/* <Link to="/releases"> */}
+        <div onClick={() => navigate(-1)}>
           <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
-        </Link>
+        </div>
+        {/* </Link> */}
       </div>
       <ul className="flex gap-x-3 px-2 bg-amber-200">
         {options.map((opt, index) => (

@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getArtist } from "../../services/Artist";
 import { getReleases } from "../../services/Release";
@@ -8,6 +8,7 @@ export default function ArtistById() {
   const params = useParams();
   const [artist, setArtist] = useState({});
   const [releases, setReleases] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getArtist(params.id).then((data) => {
@@ -30,9 +31,11 @@ export default function ArtistById() {
   return (
     <>
       <div className="bg-blue-400">
-        <Link to="/releases">
+        {/* <Link to="/releases"> */}
+        <div onClick={() => navigate(-1)}>
           <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
-        </Link>
+        </div>
+        {/* </Link> */}
       </div>
 
       <div className="grid grid-cols-2 p-2 bg-slate-200">
