@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { getRelease } from "../../services/Release";
+import { getRelease, getReleases } from "../../services/Release";
 import { useEffect, useState } from "react";
 import { getArtist } from "../../services/Artist";
 import { extractYear } from "../../utils/services";
@@ -13,8 +13,10 @@ import {
   GetLikedReleases,
 } from "../../services/User";
 import { getWishlistByUser } from "../../services/Wishlist";
-import { getRating, updateRating } from "../../services/Rating";
-import { addReview } from "../../services/Review";
+import { getRating, updateRating, getRatings } from "../../services/Rating";
+import { addReview, getReviews } from "../../services/Review";
+import Review from "../Review/Review";
+import Release from "./Release";
 import swal from "sweetalert";
 
 export default function ReleaseById() {
@@ -28,11 +30,15 @@ export default function ReleaseById() {
   const [numberOfStars, setNumberOfStars] = useState(0.0);
   const [menuStyles, setMenuStyles] = useState("");
   const [likeStyle, setLikeStyle] = useState("fa-regular fa-heart text-2xl");
+  const [ratingAverage, setRatingAverage] = useState(0);
+  const [numberOfRatings, setNumberOfRatings] = useState(0);
+  const [releaseReviews, setReleaseReviews] = useState([]);
+  const [releasesByReleaseArtist, setReleasesByReleaseArtist] = useState([]);
   const navigate = useNavigate();
 
   const toggleMenu = () => {
     setMenuStyles(
-      "bg-gradient-to-b from-orange-200 to-orange-400 inset-0 absolute h-[50%] translate-y-full transition-all duration-300 ease-in-out z-20"
+      "bg-gradient-to-b from-orange-200 to-orange-400 h-[50%] translate-y-full transition-all duration-300 ease-in-out fixed bottom-0 inset-0 z-20"
     );
     setIsMenuVisible(!isMenuVisible);
   };
@@ -84,9 +90,9 @@ export default function ReleaseById() {
   const checkIfReleaseIsAlreadyLiked = async () => {
     const data = await GetUserFromToken();
     const likedReleases = await GetLikedReleases(data.id);
-    console.log("LOS LIKED RELEASES: " + likedReleases);
+    // console.log("LOS LIKED RELEASES: " + likedReleases);
     if (likedReleases.includes(params.id + ",")) {
-      console.log("YA LO TEINE");
+      // console.log("YA LO TEINE");
       setLikeStyle("fa-solid fa-heart text-2xl");
     }
   };
@@ -162,16 +168,49 @@ export default function ReleaseById() {
     // console.log("subir review");
   };
 
+  const getReleaseReviews = async () => {
+    const reviews = await getReviews();
+    const temp = await reviews.filter((r) => r.releaseId == params.id);
+    setReleaseReviews(temp);
+  };
+
+  const getReleasesByArtist = async (id) => {
+    const temp = await getReleases();
+    const temp2 = temp.filter((r) => r.artistId == id);
+    setReleasesByReleaseArtist(temp2);
+  };
+
   useEffect(() => {
     getRelease(params.id)
       .then((data) => {
         setRelease(data);
-        return data.artistId; // returns the artistId for the next .then
-      })
-      .then((artistId) => {
-        if (artistId) {
-          getArtist(artistId).then((data) => setArtist(data));
+        if (data.artistId) {
+          getArtist(data.artistId).then((artistData) => {
+            setArtist(artistData);
+            getReleasesByArtist(artistData.id);
+          });
         }
+        return data.id; // pass the release id to the next then block
+      })
+      .then((releaseId) => {
+        getRatings().then((ratingsData) => {
+          const ratingsOfRelease = ratingsData.filter(
+            (r) => r.releaseId == releaseId
+          );
+          // console.log(ratingsOfRelease);
+          const sumOfRatingsOfRelease = ratingsOfRelease.reduce(
+            (sum, r) => sum + Number(r.ratingValue),
+            0
+          );
+          const numberOfRatingsOfRelease = ratingsOfRelease.length;
+          // console.log(sumOfRatingsOfRelease / numberOfRatingsOfRelease);
+          setNumberOfRatings(numberOfRatingsOfRelease);
+          if (numberOfRatingsOfRelease > 0) {
+            setRatingAverage(sumOfRatingsOfRelease / numberOfRatingsOfRelease);
+          } else {
+            setRatingAverage(0);
+          }
+        });
       });
 
     GetUserFromToken()
@@ -180,20 +219,20 @@ export default function ReleaseById() {
         return getRating(data.id + "-" + params.id);
       })
       .then((data) => {
-        console.log("data: ", data);
+        // console.log("data: ", data);
         if (data.id != undefined) {
           setNumberOfStars(data.ratingValue);
         }
       });
-
     checkIfTheReleaseIsOnWishlist();
     checkIfReleaseIsAlreadyLiked();
-  }, []);
+    getReleaseReviews();
+  }, [params.id]);
 
   return (
     <>
       <div className="bg-blue-400" onClick={() => navigate(-1)}>
-        <div >
+        <div>
           <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
         </div>
       </div>
@@ -221,16 +260,67 @@ export default function ReleaseById() {
       </div>
 
       <div className="bg-slate-200 mt-5 p-1 border-2 border-slate-400 m-2">
-        <div className="flex m-1 border-b-2 border-slate-400">
+        <div className="flex m-1 border-slate-400">
           <p className="flex-1">Rating</p>
-          <p className="flex-1">3.43 / 5.0 with 2.218 ratings PENDIENTE</p>
+          {/* <p className="flex-1">3.43 / 5.0 with 2.218 ratings PENDIENTE</p> */}
+          <p className="flex-1">
+            {ratingAverage !== undefined && numberOfRatings !== undefined
+              ? ratingAverage + " / 5.0 with " + numberOfRatings + " ratings."
+              : ""}
+            {/* {ratingAverage + " / 5.0 with " + numberOfRatings + " ratings."} */}
+          </p>
         </div>
-        <div className="flex m-1">
-          <p className="flex-1">Genres</p>
-          <p className="flex-1">generos... PENDIENTE</p>
+        <div className="flex m-1 flex-col">
+          <div className="mx-auto">
+            <p>Reviews</p>
+          </div>
+          <div className="flex flex-wrap">
+            {releaseReviews.map((review) => {
+              let reviewInfo = {
+                reviewId: review.id,
+                href: "/reviews/" + review.id,
+                userId: review.userId,
+                releaseId: review.releaseId,
+                reviewText: review.reviewText,
+              };
+              return (
+                <Review
+                  key={review.id}
+                  reviewInfo={reviewInfo}
+                  onClick={() => navigate(href)}
+                />
+              );
+            })}
+          </div>
+          {/* <p className="flex-1">generos... PENDIENTE</p> */}
         </div>
       </div>
-      <div className="px-2 py-5 text-lg text-white bg-[#0CE959] rounded-full absolute right-4 bottom-4 z-30">
+
+      <div className="bg-violet-300 mx-2 mt-7 mb-5">
+        <p>Other releases by {artist.name}</p>
+        <div>
+          {releasesByReleaseArtist.map((release) => {
+            let releaseInfo = {
+              href: "/releases/" + release.id,
+              src: release.cover,
+              alt: release.title,
+            };
+            // console.log(releaseInfo);
+            return (
+              <div
+                className="flex bg-red-500"
+                key={release.id}
+                onClick={() => navigate(releaseInfo.href)}
+              >
+                <Release key={release.id} albumInfo={releaseInfo} />;
+                <p className="text-xl">{release.title}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="px-2 py-5 text-lg text-white bg-[#0CE959] rounded-full sticky inline-block left-2 bottom-4 z-30">
         <i
           className="fa-solid fa-plus px-3 flex items-center"
           onClick={toggleMenu}
@@ -291,9 +381,6 @@ export default function ReleaseById() {
           {menuStyles.includes("translate-z-full") && (
             <div className="bg-white p-2 m-2">
               <form onSubmit={uploadReview}>
-                {" "}
-                //VER QUE PASA AL SUBIR LA REVIEW QUE ME TIRA UN ERROR DE
-                VALIDACION
                 <textarea
                   className="w-full h-20"
                   placeholder="Write your review here..."
