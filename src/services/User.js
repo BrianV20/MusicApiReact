@@ -29,7 +29,8 @@ export const createUser = async (data) => {
     },
     body: JSON.stringify(data),
   });
-  return await checkResponse(response);
+  // return await checkResponse(response);
+  return await response;
 }
 
 export const updateUser = async (id, data) => {

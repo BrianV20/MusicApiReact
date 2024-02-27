@@ -67,7 +67,7 @@ export default function NavBar() {
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
-                <Link to='/SignIn'>Sign out</Link>
+                <Link to='/SignIn' onClick={() => localStorage.clear('token')}>Sign out</Link>
               </li>
             </ul>
           </div>

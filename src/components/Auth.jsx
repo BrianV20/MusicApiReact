@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createUser, getUsers, login } from "../services/User";
 import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
 export default function Auth() {
   const [isSignUpShowing, setIsSignUpShowing] = useState(false);
@@ -12,6 +13,7 @@ export default function Auth() {
   const [signInEmailEl, setSignInEmailEl] = useState("");
   const [signInPasswordEl, setSignInPasswordEl] = useState("");
   const [signInRememberMeEl, setSignInRememberMeEl] = useState(false);
+  const [justRegistered, setJustRegistered] = useState(false);
   const navigate = useNavigate();
 
   const handleSignUp = (e) => {
@@ -44,7 +46,7 @@ export default function Auth() {
       console.log("Password must be at least 6 characters long");
       return false;
     }
-    if(passwordEl !== confirmPasswordEl) {
+    if (passwordEl !== confirmPasswordEl) {
       console.log("Passwords do not match");
       return false;
     }
@@ -52,32 +54,74 @@ export default function Auth() {
     return true;
   };
 
-  const registerUser = () => {
-    const user = {
-      username: usernameEl,
-      password: passwordEl,
-      email: emailEl,
-      img: "https://lastfm.freetls.fastly.net/i/u/770x0/637eb1786094ba74c8626f304b4cfc20.jpg#637eb1786094ba74c8626f304b4cfc20",
-      gender: 'F',
-      FavoriteReleases: ''
-    };
+  const registerUser = async () => {
+    try {
+      const user = {
+        username: usernameEl,
+        password: passwordEl,
+        email: emailEl,
+        img: "https://lastfm.freetls.fastly.net/i/u/770x0/637eb1786094ba74c8626f304b4cfc20.jpg#637eb1786094ba74c8626f304b4cfc20",
+        gender: "M",
+        FavoriteReleases: "",
+        LikedReleases: "",
+      };
 
-    createUser(user);
-
-    console.log("User created");
+      let temp = await createUser(user);
+      // await console.log("TEMP: " + temp.ok);
+      if (!temp.ok) {
+        console.log("NO");
+        throw new Error();
+      } else {
+        console.log("User created");
+        await signInAfterRegistering(user);
+        // swal("Success", "")
+      }
+    } catch (e) {
+      console.log(e);
+      swal(
+        "Error",
+        "That mail is already being used by another user.",
+        "error"
+      );
+      // console.log("HUBO UN ERROR");
+    }
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  // const signInAfterRegistering = (user) => {
+  //   return new Promise((resolve, reject) => {
+  //     setSignInEmailEl(user.email);
+  //     setSignInPasswordEl(user.password);
+  //     resolve();
+  //   }).then(() => {
+  //     handleLogin();
+  //   });
+  // };
+
+  const signInAfterRegistering = (user) => {
+    setSignInEmailEl(user.email);
+    setSignInPasswordEl(user.password);
+    setJustRegistered(true);
+  };
+
+  const handleLogin = async (e = null) => {
+    if (e != null) {
+      e.preventDefault();
+    }
     if (!verifySignInFields()) {
       console.log("Invalid fields");
       return;
     }
 
-    var token = await loginUser();
-    localStorage.setItem('token', token.token);
-    console.log("Local storage token: ", localStorage.getItem("token"));
-    navigate("/");
+    try {
+      var token = await loginUser();
+      localStorage.setItem("token", token.token);
+      console.log("Local storage token: ", localStorage.getItem("token"));
+      await swal("Success", "Succesful login", "success");
+      navigate("/");
+    } catch (e) {
+      console.log("LAS CREDENCIALES NO PERTENECEN A NINGUN USUARIO");
+      swal("Error", "Incorrect credentials.", "error");
+    }
   };
 
   const verifySignInFields = () => {
@@ -100,11 +144,17 @@ export default function Auth() {
   const loginUser = async () => {
     const token = await login({
       email: signInEmailEl,
-      password: signInPasswordEl
+      password: signInPasswordEl,
     });
     return token;
   };
 
+  useEffect(() => {
+    if (justRegistered) {
+      handleLogin();
+      setJustRegistered(false); // Reset the flag
+    }
+  }, [signInEmailEl, signInPasswordEl]);
 
   return (
     <>

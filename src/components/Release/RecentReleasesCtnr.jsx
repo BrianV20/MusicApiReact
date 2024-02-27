@@ -8,7 +8,8 @@ export default function RecentAlbumsCtnr() {
 
     function orderArray(array) {
         let newArray = [];
-        for (let i = array.length - 1; i >= 0; i--) {
+        // for (let i = array.length - 1; i >= 0; i--) {
+            for (let i = 0; i <= array.length; i++) {
             if(newArray.length === 15) break;
             newArray.push(array[i]);
         }
@@ -26,7 +27,7 @@ export default function RecentAlbumsCtnr() {
             <div className="pt-1 flex gap-x-3 overflow-auto whitespace-nowrap">
                 {releases.map((release) => {
                     let releaseInfo = {
-                        href: release.cover,
+                        href: '/releases/' + release.id,
                         src: release.cover,
                         alt: release.title
                     }
