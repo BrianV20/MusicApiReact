@@ -7,16 +7,41 @@ import { getWishlistByUser } from "../services/Wishlist";
 
 export default function WishList() {
   const [releases, setReleases] = useState([]);
-  const [releasesIds, setReleasesIds] = useState([]);
+  // const [releasesIds, setReleasesIds] = useState([]);-
   const [styles, setStyles] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentItems, setCurrentItems] = useState([]);
+  const itemsPerPage = 21;
 
   const getIdsFromWishlist = async (ids) => {
     const idsToSave = ids.filter(id => id !== '');
     if(idsToSave.length === 0 || idsToSave == null) return null;
     const promises = idsToSave.map((id) => getRelease(id));
-    Promise.all(promises).then((releases) => setReleases(releases));
+    Promise.all(promises).then((releases) => {
+      setReleases(releases);
+      setTotalPages(Math.ceil(releases.length / itemsPerPage));
+      setCurrentItems(releases.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)); //esto basicamente corta el array y guarda los elementos que se mostrarian en la primer pagina
+    });
+    // console.log("Total pages: " + totalPages);
     console.log("idsToSave: ", idsToSave);
   };
+
+  const handlePageChangeByArrow = (e) => {
+    // console.log(e.target.className);
+    if(e.target.className.includes('right')) {
+      if(currentPage < totalPages) {
+        setCurrentPage(currentPage + 1);
+        console.log("DERECHA");
+      }
+    }
+    else {
+      if(currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+        console.log("Izquierda");
+      }
+    }
+  }
 
 
   useEffect(() => {
@@ -29,7 +54,7 @@ export default function WishList() {
           // console.log("data: ", data)
           if (data != undefined && data != null) {
             if(data.releasesIds != null && data.releasesIds != "") {
-              getIdsFromWishlist(data.releasesIds.split(","));
+              getIdsFromWishlist(data.releasesIds.split(","))
             }
           }
           else {
@@ -42,18 +67,23 @@ export default function WishList() {
     }
   }, []);
 
+  useEffect(() => {
+    const newCurrentItems = releases.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    setCurrentItems(newCurrentItems);
+  }, [currentPage]);
+
   return (
     <>
       <NavBar />
-      <div className="bg-violet-300 w-full">
+      <div className="bg-slate-200 w-full min-h-screen pt-4">
         {/* <h1 className="text-center text-3xl py-2">WishList</h1> */}
-        <div className="flex flex-wrap justify-center gap-2">
+        <div>
           {localStorage.getItem("token") ? (
-            <div className="flex flex-wrap bg-red-300">
+            <div>
               {/* {console.log(releases)} */}
-              {releases.length > 0 ? (
-                <div>
-                  {releases.map((release) => {
+              {currentItems.length > 0 ? (
+                <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
+                  {currentItems.map((release) => {
                     let releaseInfo = {
                       href: "/releases/" + release.id,
                       src: release.cover,
@@ -71,59 +101,48 @@ export default function WishList() {
               ) : (
                 <div>Wishlist vacia</div>
               )}
-              {/* {releasesIds != null ? (
-                <div>
-                  {console.log("releasesIds: ", releasesIds)}
-                  {releasesIds.map((releaseId) => {
-                    {console.log("releaseId: ", releaseId)}
-                    getRelease(releaseId).then((data) => {
-                      let releaseInfo = {
-                        href: "/releases/" + data.id,
-                        src: data.cover,
-                        alt: data.title,
-                      };
-                      return (
-                        <Release
-                          key={data.id}
-                          albumInfo={releaseInfo}
-                          styles={styles}
-                        />
-                      );
-                    });
+              {/* {releases.length > 0 ? (
+                <div className="flex flex-wrap justify-center gap-x-2 gap-y-1">
+                  {releases.map((release) => {
+                    let releaseInfo = {
+                      href: "/releases/" + release.id,
+                      src: release.cover,
+                      alt: release.title,
+                    };
+                    return (
+                      <Release
+                        key={release.id}
+                        albumInfo={releaseInfo}
+                        styles={styles}
+                      />
+                    );
                   })}
                 </div>
               ) : (
-                console.log("todavia se esta cargando supongo")
+                <div>Wishlist vacia</div>
               )} */}
-              {/* {localStorage.getItem("token")} */}
-              {/* {releases.map((release) => {
-                let releaseInfo = {
-                  href: "/releases/" + release.id,
-                  src: release.cover,
-                  alt: release.title,
-                };
-                return (
-                  <Release
-                    key={release.id}
-                    albumInfo={releaseInfo}
-                    styles={styles}
-                  />
-                );
-              })} */}
             </div>
           ) : (
             ""
           )}
-          {/* TERMINAR ESTO, EL ARRAY DE RELEASES LO CREE SOLAMENTE PARA PROBAR LOS ESTILOS, ESTAN BIEN. 
-            EN REALIDAD DEBO HACER UN FETCH A LA API Y MOSTRAR LOS RELEASES QUE TIENE EL USUARIO QUE TIENE LA SESION INICIADA */}
-          {/* {releases.map((release) => {
-            let releaseInfo = {
-              href: "/releases/" + release.id,
-              src: release.cover,
-              alt: release.title,
-            };
-            return <Release key={release.id} albumInfo={releaseInfo} styles={styles} />;
-          })} */}
+        </div>
+
+        <div className="flex justify-center text-2xl items-center pt-7 pb-5">
+          <i className={totalPages > 1 ? 'fa-solid fa-arrow-left px-3' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
+              <div key={pageNumber}>
+                {pageNumber == currentPage ? (
+                  <button onClick={() => setCurrentPage(pageNumber)} className="px-1 font-bold">
+                  {pageNumber}
+                  </button>
+                ) : (
+                  <button onClick={() => setCurrentPage(pageNumber)} className="px-1">
+                    {pageNumber}
+                  </button>
+                )}
+              </div>
+            ))}
+          <i className={totalPages > 1 ? 'fa-solid fa-arrow-right px-3' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
         </div>
       </div>
     </>

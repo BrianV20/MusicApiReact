@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../index.css";
 import { Link } from "react-router-dom";
 
-export default function NavBar() {
+export default function NavBar({ option }) {
   const [isChecked, setIsChecked] = useState(false);
+  // const [options, setOptions] = useState(['Releases', 'Reviews', 'Lists', 'News']);
+  const [selectedOption, setSelectedOption] = useState("");
 
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
@@ -13,12 +15,20 @@ export default function NavBar() {
     setIsChecked(false);
   };
 
+  useEffect(() => {
+    setSelectedOption(option);
+  }, []);
+
   return (
     <>
-    {isChecked && <div onClick={handleOverlayClick}  className="fixed inset-0 bg-black opacity-70 z-10"></div>}
+      {isChecked && (
+        <div
+          onClick={handleOverlayClick}
+          className="fixed inset-0 bg-black opacity-70 z-10"
+        ></div>
+      )}
       <nav className="bg-orange-600">
         <div className="text-white flex justify-between py-3 px-2 md:w-[70%] md:mx-auto h-14">
-
           <input
             type="checkbox"
             id="menu"
@@ -39,7 +49,7 @@ export default function NavBar() {
             <ul>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-house"></i>
-                <Link to='/'>Home</Link>
+                <Link to="/">Home</Link>
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-magnifying-glass"></i>
@@ -47,15 +57,15 @@ export default function NavBar() {
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-user"></i>
-                <Link to='/profile'>Profile</Link>
+                <Link to="/profile">Profile</Link>
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-regular fa-clock"></i>
-                <Link to='/WishList'>Wishlist</Link>
+                <Link to="/WishList">Wishlist</Link>
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-bars-staggered"></i>
-                <Link to='/reviews'>Reviews</Link>
+                <Link to="/reviews">Reviews</Link>
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-list"></i>
@@ -67,30 +77,64 @@ export default function NavBar() {
               </li>
               <li className="burgerMenuLi">
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
-                <Link to='/SignIn' onClick={() => localStorage.clear('token')}>Sign out</Link>
+                <Link to="/SignIn" onClick={() => localStorage.clear("token")}>
+                  Sign out
+                </Link>
               </li>
             </ul>
           </div>
 
-          <Link to='/' className="w-full text-2xl pl-5 flex items-center md:pl-4">
+          <Link
+            to="/"
+            className="w-full text-2xl pl-5 flex items-center md:pl-4"
+          >
             Popular
           </Link>
-          <Link to='/search' className="self-center">
+          <Link to="/search" className="self-center">
             <i className="fa-solid fa-magnifying-glass px-3 flex items-center"></i>
           </Link>
         </div>
 
         <div className="text-white px-2 flex justify-around text-center text-base md:w-[70%] md:mx-auto">
-          <Link to='/' className="navItem">
+          <Link
+            to="/"
+            // className="navItem"
+            className={
+              selectedOption == 'Releases'
+                ? "font-semibold border-b-2 border-blue-500 "
+                : "navItem"
+            }
+          >
             Releases
           </Link>
-          <Link to='/reviews' className="navItem">
+          <Link to="/reviews" 
+          // className="navItem"
+          className={
+            selectedOption == 'Reviews'
+              ? "font-semibold border-b-2 border-blue-500 "
+              : "navItem"
+          }
+          >
             Reviews
           </Link>
-          <a href="#" className="navItem">
+          <a href="#" 
+          // className="navItem"
+          className={
+            selectedOption == 'Lists'
+              ? "font-semibold border-b-2 border-blue-500 "
+              : "navItem"
+          }
+          >
             Lists
           </a>
-          <a href="#" className="navItem">
+          <a href="#" 
+          // className="navItem"
+          className={
+            selectedOption == 'News'
+              ? "font-semibold border-b-2 border-blue-500"
+              : "navItem"
+          }
+          >
             News
           </a>
         </div>

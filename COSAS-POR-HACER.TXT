@@ -34,9 +34,9 @@ FUNCIONES PRINCIPALES:
 - Manejar el handling de errores, mostrarle mensajes de error al usuario, etc.
 
 
-🐱‍👤🎶 - Seguir con el estilo de mobile.
+🐱‍👤🎶 - Seguir con el estilo de mobile. => 1) Aplicar la propiedad de generos a los releases, para asi en la vista de un disco y en la vista del artista, mostrar los generos. Aumentar la propiedad de la longitud del reviewText dentro de la entidad Review. Darle estilo a la vista de discos dentro de artistById. En la vista de search, debe hacber una opcion para buscar solo artistas, soo reviews, solo discos o todo. Darle estilo a los resultados en search. En la vista de search, en el body mostrar un div tipo el de stremio. Darle estilo a la vista de settings. 
 
 - Hacerla responsive.
 
 
-DETALLES PARA CUANDO A PAGINA YA FUNCIONE: 1) que en la vista del perfil se puedan ver 4 discos favs, y que estos se puedan modificar en settings. 2) Agregar generos a los releases.
+DETALLES PARA CUANDO A PAGINA YA FUNCIONE: 1) que en la vista del perfil se puedan ver 4 discos favs, y que estos se puedan modificar en settings. 2) Agregar generos a los releases. 3)Ponerle paginado al contenedor de reviews dentro de un disco.

@@ -55,7 +55,7 @@ export default function UserProfile() {
   return (
     <>
       <NavBar />
-      <div className="bg-slate-200 w-full">
+      <div className="bg-slate-200 min-h-screen">
         <div className="relative">
           <img
             className="w-[40%] mx-auto rounded-full py-2"

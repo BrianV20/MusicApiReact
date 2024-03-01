@@ -206,7 +206,7 @@ export default function ReleaseById() {
           // console.log(sumOfRatingsOfRelease / numberOfRatingsOfRelease);
           setNumberOfRatings(numberOfRatingsOfRelease);
           if (numberOfRatingsOfRelease > 0) {
-            setRatingAverage(sumOfRatingsOfRelease / numberOfRatingsOfRelease);
+            setRatingAverage(Number((sumOfRatingsOfRelease / numberOfRatingsOfRelease).toFixed(2)));
           } else {
             setRatingAverage(0);
           }
@@ -296,24 +296,24 @@ export default function ReleaseById() {
         </div>
       </div>
 
-      <div className="bg-violet-300 mx-2 mt-7 mb-5">
-        <p>Other releases by {artist.name}</p>
+      <div className="bg-blue-300 mx-2 pt-2 px-1 mt-12 rounded-xl pb-3">
+        <p className="text-xl mx-1 font-semibold mb-5">Other releases by {artist.name}</p>
         <div>
           {releasesByReleaseArtist.map((release) => {
             let releaseInfo = {
               href: "/releases/" + release.id,
               src: release.cover,
               alt: release.title,
-            };
+            }
             // console.log(releaseInfo);
             return (
               <div
-                className="flex bg-red-500"
+                className="flex bg-slate-200 mb-2 w-[95%] mx-auto items-center gap-2 rounded-lg"
                 key={release.id}
                 onClick={() => navigate(releaseInfo.href)}
               >
-                <Release key={release.id} albumInfo={releaseInfo} />;
-                <p className="text-xl">{release.title}</p>
+                <Release key={release.id} albumInfo={releaseInfo} />
+                <p className="text-lg">{release.title}</p>
               </div>
             );
           })}

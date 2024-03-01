@@ -54,7 +54,7 @@ export default function ReviewById() {
         </div>
       </div>
 
-      <div className="p-2 bg-slate-200">
+      <div className="p-2 bg-slate-200 min-h-screen">
         <div className="flex text-slate-500">
           <div className="w-[55%]">
             <div className="mb-1 flex" onClick={handleUserReviewClick}>
@@ -117,7 +117,7 @@ export default function ReviewById() {
             </Link>
           </div>
         </div>
-        <div className="mt-2">
+        <div className="mt-2 border-2 pb-3 border-b-slate-400">
           <p className="text-slate-500 text-[0.8rem] overflow-ellipsis whitespace-pre-wrap">
             {review.reviewText}
           </p>
