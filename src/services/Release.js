@@ -19,3 +19,12 @@ export const getRelease = async (id) => {
     });
     return await checkResponse(response);
 }
+
+export const getGenresOfRelease = async (releaseId) => {
+    const response = await fetch(`${baseUrl}/Release/getGenresOfRelease/${releaseId}`, {
+        headers: {
+            'Accept': 'application/json'
+        }
+    });
+    return await checkResponse(response);
+}

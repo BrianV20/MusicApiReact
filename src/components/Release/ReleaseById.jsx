@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { getRelease, getReleases } from "../../services/Release";
+import { getRelease, getReleases, getGenresOfRelease } from "../../services/Release";
 import { useEffect, useState } from "react";
 import { getArtist } from "../../services/Artist";
 import { extractYear } from "../../utils/services";
@@ -18,6 +18,7 @@ import { addReview, getReviews } from "../../services/Review";
 import Review from "../Review/Review";
 import Release from "./Release";
 import swal from "sweetalert";
+import { getGenre } from "../../services/Genre";
 
 export default function ReleaseById() {
   const params = useParams();
@@ -34,6 +35,7 @@ export default function ReleaseById() {
   const [numberOfRatings, setNumberOfRatings] = useState(0);
   const [releaseReviews, setReleaseReviews] = useState([]);
   const [releasesByReleaseArtist, setReleasesByReleaseArtist] = useState([]);
+  const [genresOfRelease, setGenresOfRelease] = useState([]);
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -179,55 +181,161 @@ export default function ReleaseById() {
     const temp2 = temp.filter((r) => r.artistId == id);
     setReleasesByReleaseArtist(temp2);
   };
+  
+  // const functionToSetGenresOfRelease = async (genresArray) => {
+  //   var newArray = [];
+  //   genresArray.map((g) => {
+  //     await getGenre(g);
+  //   })
+  // };
+
+  // const getGenreById = async (id) => {
+  //   var genre = await getGenre(id);
+  //   return genre;
+  //   // console.log(genre);
+  // };
+
+  const getGenresByIds = async (genresIds) => {
+    const promises = genresIds.map(id => getGenre(id));
+    const genres = await Promise.all(promises);
+    // console.log(genres);
+    return genres;
+  }
 
   useEffect(() => {
-    getRelease(params.id)
-      .then((data) => {
-        setRelease(data);
-        if (data.artistId) {
-          getArtist(data.artistId).then((artistData) => {
-            setArtist(artistData);
-            getReleasesByArtist(artistData.id);
-          });
-        }
-        return data.id; // pass the release id to the next then block
-      })
-      .then((releaseId) => {
-        getRatings().then((ratingsData) => {
-          const ratingsOfRelease = ratingsData.filter(
-            (r) => r.releaseId == releaseId
-          );
-          // console.log(ratingsOfRelease);
-          const sumOfRatingsOfRelease = ratingsOfRelease.reduce(
-            (sum, r) => sum + Number(r.ratingValue),
-            0
-          );
-          const numberOfRatingsOfRelease = ratingsOfRelease.length;
-          // console.log(sumOfRatingsOfRelease / numberOfRatingsOfRelease);
-          setNumberOfRatings(numberOfRatingsOfRelease);
-          if (numberOfRatingsOfRelease > 0) {
-            setRatingAverage(Number((sumOfRatingsOfRelease / numberOfRatingsOfRelease).toFixed(2)));
-          } else {
-            setRatingAverage(0);
-          }
-        });
-      });
-
-    GetUserFromToken()
-      .then((data) => {
-        setUserId(data.id);
-        return getRating(data.id + "-" + params.id);
-      })
-      .then((data) => {
-        // console.log("data: ", data);
-        if (data.id != undefined) {
-          setNumberOfStars(data.ratingValue);
-        }
-      });
-    checkIfTheReleaseIsOnWishlist();
-    checkIfReleaseIsAlreadyLiked();
-    getReleaseReviews();
+    const fetchData = async () => {
+      const data = await getRelease(params.id);
+      setRelease(data);
+  
+      if (data.artistId) {
+        const artistData = await getArtist(data.artistId);
+        setArtist(artistData);
+        getReleasesByArtist(artistData.id);
+      }
+  
+      const releaseId = data.id;
+  
+      const ratingsData = await getRatings();
+      const ratingsOfRelease = ratingsData.filter((r) => r.releaseId == releaseId);
+      const sumOfRatingsOfRelease = ratingsOfRelease.reduce((sum, r) => sum + Number(r.ratingValue), 0);
+      const numberOfRatingsOfRelease = ratingsOfRelease.length;
+      setNumberOfRatings(numberOfRatingsOfRelease);
+  
+      if (numberOfRatingsOfRelease > 0) {
+        setRatingAverage(Number((sumOfRatingsOfRelease / numberOfRatingsOfRelease).toFixed(2)));
+      } else {
+        setRatingAverage(0);
+      }
+  
+      const genres = await getGenresOfRelease(releaseId);
+      var temp = genres.split(',');
+      var index = temp.indexOf('');
+      if(index !== -1){
+        temp.splice(index, 1);
+      }
+  
+      const genresData = await getGenresByIds(temp);
+      // console.log(genresData);
+      setGenresOfRelease(genresData);
+  
+      const userData = await GetUserFromToken();
+      setUserId(userData.id);
+  
+      const ratingData = await getRating(userData.id + "-" + params.id);
+      if (ratingData.id != undefined) {
+        setNumberOfStars(ratingData.ratingValue);
+      }
+  
+      checkIfTheReleaseIsOnWishlist();
+      checkIfReleaseIsAlreadyLiked();
+      getReleaseReviews();
+    };
+  
+    fetchData();
   }, [params.id]);
+
+  // useEffect(() => {
+  //   getRelease(params.id)
+  //     .then((data) => {
+  //       setRelease(data);
+  //       if (data.artistId) {
+  //         getArtist(data.artistId).then((artistData) => {
+  //           setArtist(artistData);
+  //           getReleasesByArtist(artistData.id);
+  //         });
+  //       }
+  //       return data.id; // pass the release id to the next then block
+  //     })
+  //     .then((releaseId) => {
+  //       getRatings().then((ratingsData) => {
+  //         const ratingsOfRelease = ratingsData.filter(
+  //           (r) => r.releaseId == releaseId
+  //         );
+  //         // console.log(ratingsOfRelease);
+  //         const sumOfRatingsOfRelease = ratingsOfRelease.reduce(
+  //           (sum, r) => sum + Number(r.ratingValue),
+  //           0
+  //         );
+  //         const numberOfRatingsOfRelease = ratingsOfRelease.length;
+  //         // console.log(sumOfRatingsOfRelease / numberOfRatingsOfRelease);
+  //         setNumberOfRatings(numberOfRatingsOfRelease);
+  //         if (numberOfRatingsOfRelease > 0) {
+  //           setRatingAverage(Number((sumOfRatingsOfRelease / numberOfRatingsOfRelease).toFixed(2)));
+  //         } else {
+  //           setRatingAverage(0);
+  //         }
+  //       });
+  //       getGenresOfRelease(releaseId).then((genres) => {
+  //         var temp = genres.split(',');
+  //         var index = temp.indexOf('');
+  //         if(index !== -1){
+  //           temp.splice(index, 1);
+  //         }
+
+  //         setGenresOfRelease(getGenresByIds(temp));
+  //         // console.log(typeof getGenresByIds(temp))
+          
+  //         // console.log(temp);
+  //         // functionToSetGenresOfRelease(temp);
+  //         // var genresArray = [];
+  //         // temp.map((g) => {
+  //         //   genresArray.push(getGenreById(g));
+  //         // });
+  //         // console.log(genresArray);
+  //         // setGenresOfRelease(genresArray);
+  //         // setGenresIdsOfRelease(temp)
+  //         // var prueba = genres.split(',').map((s, i) => {
+  //         //   if(s != '') return s;
+  //         // });
+  //         // console.log(prueba.map((s, i) => {
+  //         //   if(s != undefined){
+  //         //     return s;
+  //         //   }
+  //         //   else {
+  //         //     prueba[i]
+  //         //   }
+  //         // }));
+  //         // console.log(genres.split(',').map((s, i) => {
+  //         //   if(s != '') return s;
+  //         // }));
+  //       })
+  //     });
+
+  //   GetUserFromToken()
+  //     .then((data) => {
+  //       setUserId(data.id);
+  //       return getRating(data.id + "-" + params.id);
+  //     })
+  //     .then((data) => {
+  //       // console.log("data: ", data);
+  //       if (data.id != undefined) {
+  //         setNumberOfStars(data.ratingValue);
+  //       }
+  //     });
+  //   checkIfTheReleaseIsOnWishlist();
+  //   checkIfReleaseIsAlreadyLiked();
+  //   getReleaseReviews();
+  // }, [params.id]);
 
   return (
     <>
@@ -269,6 +377,22 @@ export default function ReleaseById() {
               : ""}
             {/* {ratingAverage + " / 5.0 with " + numberOfRatings + " ratings."} */}
           </p>
+        </div>
+        <div className="flex mx-1 my-4">
+          <p className="flex-1">Genres</p>
+          {/* {genresOfRelease != undefined ? <p>{genresOfRelease}</p> : <p>nada</p>} */}
+          {/* {console.log(typeof genresOfRelease)} */}
+          {/* {console.log(genresOfRelease)} */}
+          <div className="flex-1 flex flex-wrap">
+          {genresOfRelease && genresOfRelease.map((genre, index) => (
+            <div key={index}>
+              {genresOfRelease[index+1] == undefined ? 
+              <p className="mr-1">{genre.name}</p>
+              :
+              <p className="mr-1">{genre.name + ","}</p>}
+            </div>
+          ))}
+          </div>
         </div>
         <div className="flex m-1 flex-col">
           <div className="mx-auto">

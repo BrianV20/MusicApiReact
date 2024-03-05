@@ -51,3 +51,12 @@ export const deleteArtist = async (id) => {
     });
     return await checkResponse(response);
 }
+
+export const getGenresOfArtist = async (artistId) => {
+    const response = await fetch(`${baseUrl}/Artist/getGenresOfArtist/${artistId}`, {
+        headers: {
+            "Accept": "application/json"
+        }
+    });
+    return await checkResponse(response);
+}
