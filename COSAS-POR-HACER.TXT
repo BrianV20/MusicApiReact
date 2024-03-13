@@ -35,5 +35,4 @@ FUNCIONES PRINCIPALES:
 
 
 
-
-🐱‍👤🎶 - En la vista de search, debe hacber una opcion para buscar solo artistas, soo reviews, solo discos o todo. Darle estilo a los resultados en search. En la vista de search, en el body mostrar un div tipo el de stremio. Darle estilo a la vista de settings. que en la vista del perfil se puedan ver 4 discos favs, y que estos se puedan modificar en settings. Ponerle paginado al contenedor de reviews dentro de un disco. Hacerla responsive.
+🐱‍👤🎶 - Hacerla responsive.

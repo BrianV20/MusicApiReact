@@ -92,5 +92,16 @@ export const GetUserFromToken = async () => {
   return await checkResponse(response);
 }
 
+export const GetFavoriteReleases = async (userId) => {
+  const response = await fetch(`${baseUrl}/User/GetUserFavoriteReleases/${userId}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    }
+  });
+  return await checkResponse(response);
+}
+
 //SE SUPONE QUE EL METODO LOGIN DEL UserController de la api genera el token y lo devuelve. Ver como seguir con esto, es decir
 // ver que hacer con el token y qué devuelve en sí el metodo.

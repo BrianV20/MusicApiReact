@@ -74,11 +74,12 @@ export default function Search() {
           </div>
         </div>
       </div>
+      <div className="bg-green-300"></div>
 
       {searchRequest == true ? (
         <div>
-          <div className="text-3xl bg-yellow-200 w-fit p-2">Releases</div>
-          <div className="flex flex-wrap">
+          <div className="text-3xl bg-green-300 w-fit p-2 mx-auto mt-2 mb-3 font-semibold rounded-xl">Releases</div>
+          <div className="flex flex-nowrap overflow-scroll">
             {releases.map((rel) => {
               if (
                 rel.title.toLowerCase().includes(textToSearch.toLowerCase())
@@ -88,7 +89,10 @@ export default function Search() {
                   src: rel.cover,
                   alt: rel.title,
                 };
-                return <Release key={rel.id} albumInfo={releaseInfo} />;
+                return <div key={rel.id} className="min-w-[5.7rem] text-center bg-blue-300 min-h-full rounded-lg mx-1 pt-3 px-1">
+                  <Release albumInfo={releaseInfo} />
+                  <p>{rel.title}</p>
+                </div>
                 // return (
                 //   <div className="bg-red-400 mx-3 my-2" key={rel.id}>
                 //     <p>{rel.title}</p>
@@ -98,8 +102,8 @@ export default function Search() {
             })}
           </div>
 
-          <div className="text-3xl bg-yellow-200 w-fit p-2">Artists</div>
-          <div className="flex flex-wrap">
+          <div className="text-3xl bg-green-300 w-fit p-2 mt-7 mb-3 mx-auto font-semibold rounded-xl">Artists</div>
+          <div className="flex flex-nowrap overflow-scroll">
             {artists.map((art) => {
               if (art.name.toLowerCase().includes(textToSearch.toLowerCase())) {
                 let artInfo = {
@@ -107,7 +111,9 @@ export default function Search() {
                   src: art.img,
                   name: art.name,
                 };
-                return <Artist key={art.id} artistInfo={artInfo} />;
+                return <div key={art.id} className="min-w-[5.7rem] bg-blue-300 min-h-full rounded-lg mx-1 pt-3">
+                  <Artist artistInfo={artInfo} />
+                </div>
                 // return (
                 //   <div className="bg-red-400 mx-3 my-2" key={art.id}>
                 //     <p>{art.name}</p>
@@ -117,7 +123,7 @@ export default function Search() {
             })}
           </div>
 
-          <div className="text-3xl bg-yellow-200 w-fit p-2">Reviews</div>
+          <div className="text-3xl bg-green-300 w-fit p-2 mt-7 mb-3 mx-auto font-semibold rounded-xl">Reviews</div>
           <div>
             {reviews.map((rev) => {
               // console.log("REVIEW NRO " + rev.id + ": " + Object.keys(rev));
