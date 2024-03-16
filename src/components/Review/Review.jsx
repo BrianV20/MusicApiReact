@@ -31,10 +31,10 @@ export default function Review({ reviewInfo }) {
       {/* <Link to={"/reviews/" + reviewId}> */}
       <div onClick={() => navigate(`/reviews/${reviewId}`)}>
         <div className="flex flex-wrap justify-between">
-          <div className="flex items-baseline w-[50%] break-words flex-wrap">
-            <p className="font-semibold">{release.title}</p>
+          <div className="flex items-baseline w-[50%] break-words flex-wrap self-center">
+            <p className="font-semibold md:text-2xl">{release.title}</p>
             {release.releaseDate && typeof release.releaseDate === "string" ? (
-              <p className="text-slate-500 text-[0.8rem] ml-0.5">
+              <p className="text-slate-500 text-[0.8rem] ml-0.5 md:text-xl md:ml-2">
                 {extractYear(release.releaseDate)}
               </p>
             ) : (
@@ -43,28 +43,26 @@ export default function Review({ reviewInfo }) {
           </div>
           <div className="w-[50%]">
             <div className="flex flex-wrap justify-end align-top">
-              <p className="text-slate-500 text-[0.8rem] self-center mx-1">
+              <p className="text-slate-500 text-[0.8rem] self-center mx-1 md:text-xl">
                 {user.username}
               </p>
-              <p>
                 <img
                   src={user.img}
-                  className="userImgStyleSmall"
+                  className="userImgStyleSmall md:min-w-[3.5rem] md:min-h-[3.5rem]"
                   alt="user pic"
                 />
-              </p>
             </div>
           </div>
         </div>
 
         <div>
           <div>
-            <p className="text-slate-500 text-[0.8rem]">
+            <p className="text-slate-500 text-[0.8rem] md:text-xl">
               {rating && rating.ratingValue ? (
                 // Number.isInteger(rating.ratingValue) ? (
                 rating.ratingValue.includes(".") == false ? (
                   Array.from({ length: rating.ratingValue }).map((_, i) => (
-                    <i key={i} className="fa-solid fa-star text-[#0CE959]" />
+                    <i key={i} className="fa-solid fa-star text-[#0CE959] " />
                   ))
                 ) : (
                   <>
@@ -88,15 +86,14 @@ export default function Review({ reviewInfo }) {
 
         <div className="break-words flex pt-3">
           <img
-            className="w-[5rem] h-[5.5rem] border-2 border-slate-400 mr-2"
+            className="w-[5rem] h-[5.5rem] border-2 border-slate-400 mr-2 md:w-[6.5rem] md:min-h-[6.5rem]"
             src={release.cover}
             alt={release.title}
           />
-          <p className="text-slate-500 text-[0.8rem] overflow-ellipsis whitespace-pre-wrap">
+          <p className="text-slate-500 text-[0.8rem] overflow-ellipsis whitespace-pre-wrap md:text-xl">
             {reviewText}
           </p>
         </div>
-        {/* </Link> */}
       </div>
     </div>
   );

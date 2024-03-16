@@ -16,7 +16,7 @@ export default function WishList() {
 
   const getIdsFromWishlist = async (ids) => {
     const idsToSave = ids.filter(id => id !== '');
-    if(idsToSave.length === 0 || idsToSave == null) return null;
+    if (idsToSave.length === 0 || idsToSave == null) return null;
     const promises = idsToSave.map((id) => getRelease(id));
     Promise.all(promises).then((releases) => {
       setReleases(releases);
@@ -29,14 +29,14 @@ export default function WishList() {
 
   const handlePageChangeByArrow = (e) => {
     // console.log(e.target.className);
-    if(e.target.className.includes('right')) {
-      if(currentPage < totalPages) {
+    if (e.target.className.includes('right')) {
+      if (currentPage < totalPages) {
         setCurrentPage(currentPage + 1);
         console.log("DERECHA");
       }
     }
     else {
-      if(currentPage > 1) {
+      if (currentPage > 1) {
         setCurrentPage(currentPage - 1);
         console.log("Izquierda");
       }
@@ -45,7 +45,7 @@ export default function WishList() {
 
 
   useEffect(() => {
-    styles != null ? setStyles("w-[4.7rem] min-h-22") : "";
+    styles != null ? setStyles("w-[4.7rem] min-h-22 md:w-[8.5rem] md:min-h-full") : "";
     try {
       GetUserFromToken()
         .then((data) => getWishlistByUser(data.id))
@@ -53,7 +53,7 @@ export default function WishList() {
         .then((data) => {
           // console.log("data: ", data)
           if (data != undefined && data != null) {
-            if(data.releasesIds != null && data.releasesIds != "") {
+            if (data.releasesIds != null && data.releasesIds != "") {
               getIdsFromWishlist(data.releasesIds.split(","))
             }
           }
@@ -75,65 +75,46 @@ export default function WishList() {
   return (
     <>
       <NavBar />
-      <div className="bg-slate-200 w-full min-h-screen pt-4">
-        {/* <h1 className="text-center text-3xl py-2">WishList</h1> */}
-        <div>
-          {localStorage.getItem("token") ? (
-            <div>
-              {/* {console.log(releases)} */}
-              {currentItems.length > 0 ? (
-                <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
-                  {currentItems.map((release) => {
-                    let releaseInfo = {
-                      href: "/releases/" + release.id,
-                      src: release.cover,
-                      alt: release.title,
-                    };
-                    return (
-                      <Release
-                        key={release.id}
-                        albumInfo={releaseInfo}
-                        styles={styles}
-                      />
-                    );
-                  })}
-                </div>
-              ) : (
-                <div>Wishlist vacia</div>
-              )}
-              {/* {releases.length > 0 ? (
-                <div className="flex flex-wrap justify-center gap-x-2 gap-y-1">
-                  {releases.map((release) => {
-                    let releaseInfo = {
-                      href: "/releases/" + release.id,
-                      src: release.cover,
-                      alt: release.title,
-                    };
-                    return (
-                      <Release
-                        key={release.id}
-                        albumInfo={releaseInfo}
-                        styles={styles}
-                      />
-                    );
-                  })}
-                </div>
-              ) : (
-                <div>Wishlist vacia</div>
-              )} */}
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
+      <div className="bg-slate-200">
+        <div className="md:w-[80%] min-h-screen md:mx-auto">
+          <div className="pt-4 md:pt-7">
+            {/* <h1 className="text-center text-3xl py-2">WishList</h1> */}
+            {localStorage.getItem("token") ? (
+              <div>
+                {/* {console.log(releases)} */}
+                {currentItems.length > 0 ? (
+                  <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
+                    {currentItems.map((release) => {
+                      let releaseInfo = {
+                        href: "/releases/" + release.id,
+                        src: release.cover,
+                        alt: release.title,
+                      };
+                      return (
+                        <Release
+                          key={release.id}
+                          albumInfo={releaseInfo}
+                          styles={styles}
+                        />
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="md:text-2xl">Empty wishlist...</p>
+                )}
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
 
-        <div className="flex justify-center text-2xl items-center pt-7 pb-5">
-          <i className={totalPages > 1 ? 'fa-solid fa-arrow-left px-3' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
+          <div className="flex justify-center text-2xl items-center pt-7 pb-5 md:text-4xl md:pt-10 md:gap-x-6">
+            <i className={totalPages > 1 ? 'fa-solid fa-arrow-left px-3' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
               <div key={pageNumber}>
                 {pageNumber == currentPage ? (
                   <button onClick={() => setCurrentPage(pageNumber)} className="px-1 font-bold">
-                  {pageNumber}
+                    {pageNumber}
                   </button>
                 ) : (
                   <button onClick={() => setCurrentPage(pageNumber)} className="px-1">
@@ -142,7 +123,8 @@ export default function WishList() {
                 )}
               </div>
             ))}
-          <i className={totalPages > 1 ? 'fa-solid fa-arrow-right px-3' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
+            <i className={totalPages > 1 ? 'fa-solid fa-arrow-right px-3' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
+          </div>
         </div>
       </div>
     </>

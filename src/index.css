@@ -23,6 +23,18 @@
         @apply text-2xl mx-5 text-slate-400;
     }
 
+    .mdBurgerMenuLi {
+        @apply py-3 flex items-center;
+    }
+
+    .mdBurgerMenuLi > i {
+        @apply mx-5;
+    }
+
+    .mdBurgerMenuLi:hover {
+        @apply bg-blue-500 text-white;
+    }
+
     .userImgStyleSmall {
         @apply w-8 h-8 rounded-full my-auto;
     }

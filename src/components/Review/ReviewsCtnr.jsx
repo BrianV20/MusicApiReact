@@ -47,71 +47,75 @@ export default function ReviewsCtnr() {
   return (
     <>
       <NavBar option="Reviews" />
-      <div className="bg-slate-200 min-h-screen px-2 py-2 md:w-fit md:self-center">
-        <h4>Popular reviews this week</h4>
-        <div className="pt-1 flex gap-x-3 overflow-x-scroll whitespace-nowrap flex-col">
-          {currentItems.length > 0 ? (
-            <div>
-              {currentItems.map((review) => {
-                let reviewInfo = {
-                  reviewId: review.id,
-                  href: "/reviews/" + review.id,
-                  userId: review.userId,
-                  releaseId: review.releaseId,
-                  reviewText: review.reviewText,
-                };
-                return <Review key={review.id} reviewInfo={reviewInfo} />;
-              })}
-            </div>
-          ) : (
-            ''
-          )}
-          {/* {reviews.map((review) => {
-            let reviewInfo = {
-              reviewId: review.id,
-              href: "/reviews/" + review.id,
-              userId: review.userId,
-              releaseId: review.releaseId,
-              reviewText: review.reviewText,
-            };
-            return <Review key={review.id} reviewInfo={reviewInfo} />;
-          })} */}
-        </div>
-
-        <div className="flex justify-center text-2xl items-center pt-7 pb-5">
-          <i
-            className={
-              totalPages > 1 ? "fa-solid fa-arrow-left px-3" : "hidden"
-            }
-            onClick={(e) => handlePageChangeByArrow(e)}
-          ></i>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-            (pageNumber) => (
-              <div key={pageNumber}>
-                {pageNumber == currentPage ? (
-                  <button
-                    onClick={() => setCurrentPage(pageNumber)}
-                    className="px-1 font-bold"
-                  >
-                    {pageNumber}
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setCurrentPage(pageNumber)}
-                    className="px-1"
-                  >
-                    {pageNumber}
-                  </button>
-                )}
+      <div className="bg-slate-200">
+        <div className="md:w-[80%] md:mx-auto min-h-screen">
+        <div className="px-2 py-2">
+          <h4 className="text-xl md:text-2xl md:pt-4 md:pb-2">Popular reviews this week</h4>
+          <div className="pt-1 flex gap-x-3 overflow-x-scroll whitespace-nowrap flex-col">
+            {currentItems.length > 0 ? (
+              <div>
+                {currentItems.map((review) => {
+                  let reviewInfo = {
+                    reviewId: review.id,
+                    href: "/reviews/" + review.id,
+                    userId: review.userId,
+                    releaseId: review.releaseId,
+                    reviewText: review.reviewText,
+                  };
+                  return <Review key={review.id} reviewInfo={reviewInfo} />;
+                })}
               </div>
-            )
-          )}
-          <i
-            className={
-              totalPages > 1 ? "fa-solid fa-arrow-right px-3" : "hidden"
-            }
-            onClick={(e) => handlePageChangeByArrow(e)}
-          ></i>
+            ) : (
+              ''
+            )}
+            {/* {reviews.map((review) => {
+              let reviewInfo = {
+                reviewId: review.id,
+                href: "/reviews/" + review.id,
+                userId: review.userId,
+                releaseId: review.releaseId,
+                reviewText: review.reviewText,
+              };
+              return <Review key={review.id} reviewInfo={reviewInfo} />;
+            })} */}
+          </div>
+
+          <div className="flex justify-center text-2xl items-center pt-7 pb-5 md:text-4xl md:pt-10 md:gap-x-6">
+            <i
+              className={
+                totalPages > 1 ? "fa-solid fa-arrow-left px-3" : "hidden"
+              }
+              onClick={(e) => handlePageChangeByArrow(e)}
+            ></i>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (pageNumber) => (
+                <div key={pageNumber}>
+                  {pageNumber == currentPage ? (
+                    <button
+                      onClick={() => setCurrentPage(pageNumber)}
+                      className="px-1 font-bold"
+                    >
+                      {pageNumber}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setCurrentPage(pageNumber)}
+                      className="px-1"
+                    >
+                      {pageNumber}
+                    </button>
+                  )}
+                </div>
+              )
+            )}
+            <i
+              className={
+                totalPages > 1 ? "fa-solid fa-arrow-right px-3" : "hidden"
+              }
+              onClick={(e) => handlePageChangeByArrow(e)}
+            ></i>
+          </div>
+        </div>
         </div>
       </div>
     </>

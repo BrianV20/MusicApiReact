@@ -12,7 +12,7 @@ export default function Release({ albumInfo, styles = "" }) {
           {styles ? (
             <img src={src} alt={alt} className={styles} />
           ) : (
-            <img src={src} alt={alt} className="w-[6.5rem] min-h-28" />
+            <img src={src} alt={alt} className="w-[6.5rem] min-h-28 md:w-36 md:min-h-[10rem]" />
           )}
         </div>
         {/* <Link to={href}>

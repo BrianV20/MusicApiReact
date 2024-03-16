@@ -23,7 +23,7 @@ export default function RecentAlbumsCtnr() {
     return (
         <>
         <div className="px-2 pt-5 md:w-fit md:self-center">
-            <h4>Recently added</h4>
+            <h4 className="md:text-3xl text-xl md:my-2">Recently added</h4>
             <div className="pt-1 flex gap-x-3 overflow-auto whitespace-nowrap">
                 {releases.map((release) => {
                     let releaseInfo = {

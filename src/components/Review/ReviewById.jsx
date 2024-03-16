@@ -6,6 +6,7 @@ import { getUser, GetUserFromToken } from "../../services/User";
 import { getRating } from "../../services/Rating";
 import { getReview } from "../../services/Review";
 import { extractYear } from "../../utils/services";
+import GoBackNavbar from "../GoBackNavbar";
 
 export default function ReviewById() {
   const params = useParams();
@@ -46,34 +47,28 @@ export default function ReviewById() {
   }, []);
   return (
     <>
-      <div className="bg-blue-400">
-        <div onClick={() => navigate(-1)}>
-          {/* <Link to="/releases"> */}
-          <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
-          {/* </Link> */}
-        </div>
-      </div>
+      <GoBackNavbar />
 
       <div className="p-2 bg-slate-200 min-h-screen">
-        <div className="flex text-slate-500">
+        <div className="flex text-slate-500 p-5">
           <div className="w-[55%]">
             <div className="mb-1 flex" onClick={handleUserReviewClick}>
               {/* <Link to={loggedUser.id == review.userId ? `/profile` : `/users/${review.userId}`} className="flex"> */}
               <img
                 src={user.img}
                 alt="user pic"
-                className="userImgStyleSmall"
+                className="userImgStyleSmall md:w-[5rem] md:min-h-[5rem]"
               />
-              <p className="text-[0.8rem] self-center ml-2">{user.username}</p>
+              <p className="text-[0.8rem] self-center ml-2 md:text-2xl">{user.username}</p>
               {/* </Link> */}
             </div>
             <div className="mb-1">
-              <p className="text-[1.2rem] font-semibold text-black">
+              <p className="text-[1.2rem] font-semibold text-black md:text-4xl md:mt-5">
                 {release.title}
               </p>
               {release.releaseDate &&
               typeof release.releaseDate === "string" ? (
-                <p className="text-slate-500 text-[0.9rem]">
+                <p className="text-slate-500 text-[0.9rem] md:text-3xl md:my-2">
                   {extractYear(release.releaseDate)}
                 </p>
               ) : (
@@ -87,7 +82,7 @@ export default function ReviewById() {
                 // Number.isInteger(rating.ratingValue) ? (
                 rating.ratingValue.includes(".") == false ? (
                   Array.from({ length: rating.ratingValue }).map((_, i) => (
-                    <i key={i} className="fa-solid fa-star text-[#0CE959]" />
+                    <i key={i} className="fa-solid fa-star text-[#0CE959] md:text-2xl" />
                   ))
                 ) : (
                   <>
@@ -95,11 +90,11 @@ export default function ReviewById() {
                       (_, i) => (
                         <i
                           key={i}
-                          className="fa-solid fa-star text-[#0CE959]"
+                          className="fa-solid fa-star text-[#0CE959] md:text-2xl"
                         />
                       )
                     )}
-                    <i className="fa-regular fa-star-half-stroke text-[#0CE959]"></i>
+                    <i className="fa-regular fa-star-half-stroke text-[#0CE959] md:text-2xl"></i>
                   </>
                 ))
               : ""}
@@ -110,15 +105,15 @@ export default function ReviewById() {
               onClick={() => navigate(`/releases/${release.id}`)}
             >
               <img
-                className="border-2 border-slate-400 h-full max-h-[8rem]"
+                className="border-2 border-slate-400 h-full max-h-[8rem] md:w-[17rem] md:min-h-[17rem]"
                 src={release.cover}
                 alt={release.title}
               />
             </Link>
           </div>
         </div>
-        <div className="mt-2 border-2 pb-3 border-b-slate-400">
-          <p className="text-slate-500 text-[0.8rem] overflow-ellipsis whitespace-pre-wrap">
+        <div className="mt-2 border-2 pb-3 border-b-slate-400 md:px-5">
+          <p className="text-slate-500 text-[0.8rem] overflow-ellipsis whitespace-pre-wrap md:text-2xl md:leading-8">
             {review.reviewText}
           </p>
         </div>

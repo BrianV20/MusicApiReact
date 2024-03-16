@@ -3,6 +3,7 @@ import { getRelease, getReleases, getGenresOfRelease } from "../../services/Rele
 import { useEffect, useState } from "react";
 import { getArtist } from "../../services/Artist";
 import { extractYear } from "../../utils/services";
+import GoBackNavbar from "../GoBackNavbar";
 import {
   addReleaseToWishlist,
   deleteReleaseFromWishlist,
@@ -339,188 +340,193 @@ export default function ReleaseById() {
 
   return (
     <>
-      <div className="bg-blue-400" onClick={() => navigate(-1)}>
+      {/* <div className="bg-blue-400" onClick={() => navigate(-1)}>
         <div>
           <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
         </div>
-      </div>
+      </div> */}
+      <GoBackNavbar />
 
-      <div className="grid grid-cols-2 p-2 bg-slate-200">
-        <div>
-          <h2 className="text-2xl font-semibold">{release.title}</h2>
-          <Link to={`/artists/${artist.id}`}>
-            <p className="text-slate-500 mt-3 mb-1">By: {artist.name}</p>
-          </Link>
-          {release.releaseDate && typeof release.releaseDate === "string" ? (
-            <p className="text-slate-500">{extractYear(release.releaseDate)}</p>
-          ) : (
-            ""
-          )}
-        </div>
-
-        <div>
-          <img
-            className="border-2 border-slate-400"
-            src={release.cover}
-            alt={release.title}
-          />
-        </div>
-      </div>
-
-      <div className="bg-slate-200 mt-5 p-1 border-2 border-slate-400 m-2">
-        <div className="flex m-1 border-slate-400">
-          <p className="flex-1">Rating</p>
-          {/* <p className="flex-1">3.43 / 5.0 with 2.218 ratings PENDIENTE</p> */}
-          <p className="flex-1">
-            {ratingAverage !== undefined && numberOfRatings !== undefined
-              ? ratingAverage + " / 5.0 with " + numberOfRatings + " ratings."
-              : ""}
-            {/* {ratingAverage + " / 5.0 with " + numberOfRatings + " ratings."} */}
-          </p>
-        </div>
-        <div className="flex mx-1 my-4">
-          <p className="flex-1">Genres</p>
-          {/* {genresOfRelease != undefined ? <p>{genresOfRelease}</p> : <p>nada</p>} */}
-          {/* {console.log(typeof genresOfRelease)} */}
-          {/* {console.log(genresOfRelease)} */}
-          <div className="flex-1 flex flex-wrap">
-          {genresOfRelease && genresOfRelease.map((genre, index) => (
-            <div key={index}>
-              {genresOfRelease[index+1] == undefined ? 
-              <p className="mr-1">{genre.name}</p>
-              :
-              <p className="mr-1">{genre.name + ","}</p>}
-            </div>
-          ))}
-          </div>
-        </div>
-        <div className="flex m-1 flex-col">
-          <div className="mx-auto">
-            <p>Reviews</p>
-          </div>
-          <div className="flex flex-wrap">
-            {releaseReviews.map((review) => {
-              let reviewInfo = {
-                reviewId: review.id,
-                href: "/reviews/" + review.id,
-                userId: review.userId,
-                releaseId: review.releaseId,
-                reviewText: review.reviewText,
-              };
-              return (
-                <Review
-                  key={review.id}
-                  reviewInfo={reviewInfo}
-                  onClick={() => navigate(href)}
-                />
-              );
-            })}
-          </div>
-          {/* <p className="flex-1">generos... PENDIENTE</p> */}
-        </div>
-      </div>
-
-      <div className="bg-blue-300 mx-2 pt-2 px-1 mt-12 rounded-xl pb-3">
-        <p className="text-xl mx-1 font-semibold mb-5">Other releases by {artist.name}</p>
-        <div>
-          {releasesByReleaseArtist.map((release) => {
-            let releaseInfo = {
-              href: "/releases/" + release.id,
-              src: release.cover,
-              alt: release.title,
-            }
-            // console.log(releaseInfo);
-            return (
-              <div
-                className="flex bg-slate-200 mb-2 w-[95%] mx-auto items-center gap-2 rounded-lg"
-                key={release.id}
-                onClick={() => navigate(releaseInfo.href)}
-              >
-                <Release key={release.id} albumInfo={releaseInfo} />
-                <p className="text-lg">{release.title}</p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="px-2 py-5 text-lg text-white bg-[#0CE959] rounded-full sticky inline-block left-2 bottom-4 z-30">
-        <i
-          className="fa-solid fa-plus px-3 flex items-center"
-          onClick={toggleMenu}
-        ></i>
-      </div>
-
-      {isMenuVisible && (
-        <div className={menuStyles}>
-          {/* <div className={isMenuVisible ? 'bg-blue-500 inset-0 absolute h-[50%] transition-all duration-300 ease-in-out translate-y-full' : 'bg-blue-500 inset-0 absolute h-[60%] transition-all duration-300 ease-in-out hidden'}> */}
-          <div className="flex justify-around text-center py-1">
+      <div className="bg-slate-200">
+        <div className="md:w-[80%] md:mx-auto min-h-screen">
+          <div className="grid grid-cols-2 p-2 md:p-5">
             <div>
-              <i className="fa-regular fa-eye text-2xl"></i>
-              <p>Watch</p>
+              <h2 className="text-2xl font-semibold md:text-4xl">{release.title}</h2>
+              <Link to={`/artists/${artist.id}`}>
+                <p className="text-slate-500 mt-3 mb-1 md:text-3xl md:mt-4">By: {artist.name}</p>
+              </Link>
+              {release.releaseDate && typeof release.releaseDate === "string" ? (
+                <p className="text-slate-500 md:text-3xl md:mt-2">{extractYear(release.releaseDate)}</p>
+              ) : (
+                ""
+              )}
             </div>
-            <div onClick={likeRelease}>
-              <i className={likeStyle}></i>
-              <p>Like</p>
-            </div>
-            <div onClick={reviewRelease}>
-              <i className="fa-solid fa-plus text-2xl"></i>
-              <p>Review</p>
-            </div>
+
             <div>
-              <div onClick={addToWatchlist}>
-                <i className={wishlistIcons[0]}></i>
-                <i className={wishlistIcons[1]}></i>
-                <p>Wishlist</p>
-              </div>
+              <img
+                className="border-2 border-slate-400 md:min-h-[20rem]"
+                src={release.cover}
+                alt={release.title}
+              />
             </div>
           </div>
-          <div className="text-2xl my-4 mx-2 border-2 border-black flex justify-center text-center">
-            <div className="flex border-2 border-blue-400 w-[40%] justify-center">
-              <div className="">
-                <i className="fa-solid fa-chevron-up" onClick={addStar}></i>
-                <p>{numberOfStars ? numberOfStars : 0}</p>
-                <i
-                  className="fa-solid fa-chevron-down"
-                  onClick={removeStar}
-                ></i>
+
+          <div className="bg-slate-200 mt-5 p-1 border-2 border-slate-400 m-2 md:text-2xl">
+            <div className="flex m-1 border-slate-400">
+              <p className="flex-1">Rating</p>
+              {/* <p className="flex-1">3.43 / 5.0 with 2.218 ratings PENDIENTE</p> */}
+              <p className="flex-1">
+                {ratingAverage !== undefined && numberOfRatings !== undefined
+                  ? ratingAverage + " / 5.0 with " + numberOfRatings + " ratings."
+                  : ""}
+                {/* {ratingAverage + " / 5.0 with " + numberOfRatings + " ratings."} */}
+              </p>
+            </div>
+            <div className="flex mx-1 my-4">
+              <p className="flex-1">Genres</p>
+              {/* {genresOfRelease != undefined ? <p>{genresOfRelease}</p> : <p>nada</p>} */}
+              {/* {console.log(typeof genresOfRelease)} */}
+              {/* {console.log(genresOfRelease)} */}
+              <div className="flex-1 flex flex-wrap">
+              {genresOfRelease && genresOfRelease.map((genre, index) => (
+                <div key={index}>
+                  {genresOfRelease[index+1] == undefined ? 
+                  <p className="mr-1">{genre.name}</p>
+                  :
+                  <p className="mr-1">{genre.name + ","}</p>}
+                </div>
+              ))}
               </div>
-              <div className="self-center ml-2">
-                <i className="fa-solid fa-star text-[#0CE959]"></i>
+            </div>
+            <div className="flex m-1 flex-col">
+              <div className="mx-auto">
+                <p>Reviews</p>
               </div>
-              {/* <i
-              className="fa-solid fa-times text-2xl"
+              <div className="flex flex-wrap">
+                {releaseReviews.map((review) => {
+                  let reviewInfo = {
+                    reviewId: review.id,
+                    href: "/reviews/" + review.id,
+                    userId: review.userId,
+                    releaseId: review.releaseId,
+                    reviewText: review.reviewText,
+                  };
+                  return (
+                    <Review
+                      key={review.id}
+                      reviewInfo={reviewInfo}
+                      onClick={() => navigate(href)}
+                    />
+                  );
+                })}
+              </div>
+              {/* <p className="flex-1">generos... PENDIENTE</p> */}
+            </div>
+          </div>
+
+          <div className="bg-blue-300 mx-2 pt-2 px-1 mt-12 rounded-xl pb-3">
+            <p className="text-xl mx-1 font-semibold mb-5 md:text-2xl">Other releases by {artist.name}</p>
+            <div>
+              {releasesByReleaseArtist.map((release) => {
+                let releaseInfo = {
+                  href: "/releases/" + release.id,
+                  src: release.cover,
+                  alt: release.title,
+                }
+                // console.log(releaseInfo);
+                return (
+                  <div
+                    className="flex bg-slate-200 mb-2 w-[95%] mx-auto items-center gap-2 rounded-lg"
+                    key={release.id}
+                    onClick={() => navigate(releaseInfo.href)}
+                  >
+                    <Release key={release.id} albumInfo={releaseInfo} />
+                    <p className="text-lg md:text-2xl">{release.title}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="px-2 py-5 text-lg text-white bg-[#0CE959] rounded-full sticky inline-block left-2 bottom-4 z-30 md:px-4 md:py-7 md:text-4xl">
+            <i
+              className="fa-solid fa-plus px-3 flex items-center"
               onClick={toggleMenu}
-              ></i> */}
-            </div>
-            <div className="w-[40%] self-center">
-              <button
-                className="bg-gray-300 h-10 w-[5rem] m-auto"
-                onClick={rateRelease}
-              >
-                Rate
-              </button>
-            </div>
+            ></i>
           </div>
-          {menuStyles.includes("translate-z-full") && (
-            <div className="bg-white p-2 m-2">
-              <form onSubmit={uploadReview}>
-                <textarea
-                  className="w-full h-20"
-                  placeholder="Write your review here..."
-                  name="reviewText"
-                ></textarea>
-                <button type="submit" className="bg-gray-300 h-10 w-full">
-                  Submit
-                </button>
-              </form>
+
+          {isMenuVisible && (
+            <div className={menuStyles}>
+              {/* <div className={isMenuVisible ? 'bg-blue-500 inset-0 absolute h-[50%] transition-all duration-300 ease-in-out translate-y-full' : 'bg-blue-500 inset-0 absolute h-[60%] transition-all duration-300 ease-in-out hidden'}> */}
+              <div className="flex justify-around text-center py-1">
+                <div>
+                  <i className="fa-regular fa-eye text-2xl"></i>
+                  <p>Watch</p>
+                </div>
+                <div onClick={likeRelease}>
+                  <i className={likeStyle}></i>
+                  <p>Like</p>
+                </div>
+                <div onClick={reviewRelease}>
+                  <i className="fa-solid fa-plus text-2xl"></i>
+                  <p>Review</p>
+                </div>
+                <div>
+                  <div onClick={addToWatchlist}>
+                    <i className={wishlistIcons[0]}></i>
+                    <i className={wishlistIcons[1]}></i>
+                    <p>Wishlist</p>
+                  </div>
+                </div>
+              </div>
+              <div className="text-2xl my-4 mx-2 border-2 border-black flex justify-center text-center">
+                <div className="flex border-2 border-blue-400 w-[40%] justify-center">
+                  <div className="">
+                    <i className="fa-solid fa-chevron-up" onClick={addStar}></i>
+                    <p>{numberOfStars ? numberOfStars : 0}</p>
+                    <i
+                      className="fa-solid fa-chevron-down"
+                      onClick={removeStar}
+                    ></i>
+                  </div>
+                  <div className="self-center ml-2">
+                    <i className="fa-solid fa-star text-[#0CE959]"></i>
+                  </div>
+                  {/* <i
+                  className="fa-solid fa-times text-2xl"
+                  onClick={toggleMenu}
+                  ></i> */}
+                </div>
+                <div className="w-[40%] self-center">
+                  <button
+                    className="bg-gray-300 h-10 w-[5rem] m-auto"
+                    onClick={rateRelease}
+                  >
+                    Rate
+                  </button>
+                </div>
+              </div>
+              {menuStyles.includes("translate-z-full") && (
+                <div className="bg-white p-2 m-2">
+                  <form onSubmit={uploadReview}>
+                    <textarea
+                      className="w-full h-20"
+                      placeholder="Write your review here..."
+                      name="reviewText"
+                    ></textarea>
+                    <button type="submit" className="bg-gray-300 h-10 w-full">
+                      Submit
+                    </button>
+                  </form>
+                </div>
+              )}
             </div>
           )}
+          {isMenuVisible && (
+            <div className="fixed inset-0 bg-black opacity-70 z-10" />
+          )}
         </div>
-      )}
-      {isMenuVisible && (
-        <div className="fixed inset-0 bg-black opacity-70 z-10" />
-      )}
+      </div>
     </>
   );
 }

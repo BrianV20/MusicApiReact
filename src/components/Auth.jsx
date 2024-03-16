@@ -159,11 +159,10 @@ export default function Auth() {
   return (
     <>
       <div className="flex bg-pink-300 flex-col h-screen overflow-hidden justify-center">
-        {" "}
         {isSignUpShowing ? (
-          <div className="flex items-center justify-center w-[90%] mx-auto">
-            <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Sign Up</h2>
+          <div className="flex items-center justify-center w-[90%] mx-auto md:w-[60%] md:text-2xl">
+            <div className="w-full bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 md:text-4xl">Sign Up</h2>
               <form className="flex flex-col" onSubmit={(e) => handleSignUp(e)}>
                 <input
                   type="email"
@@ -196,7 +195,7 @@ export default function Auth() {
                 <div className="flex items-center justify-between flex-wrap">
                   <label
                     htmlFor="remember-me"
-                    className="text-sm text-gray-900 cursor-pointer"
+                    className="text-sm text-gray-900 cursor-pointer md:text-xl"
                   >
                     <input
                       type="checkbox"
@@ -205,14 +204,14 @@ export default function Auth() {
                       checked={rememeberMeEl}
                       onChange={(e) => setRememberMeEl(e.target.checked)}
                     />
-                    Remember me
+                    <p className="inline-block md:text-xl">Remember me</p>
                   </label>
                   <p className="text-gray-900 mt-4">
                     {" "}
                     Already have an account?{" "}
                     <a
                       href="#"
-                      className="text-sm text-blue-500 -200 hover:underline mt-4"
+                      className="text-sm text-blue-500 -200 hover:underline mt-4 md:text-xl"
                       onClick={() => setIsSignUpShowing(!isSignUpShowing)}
                     >
                       Sign in
@@ -222,7 +221,7 @@ export default function Auth() {
                 <button
                   type="submit"
                   className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150"
-                  // onClick={(e) => handleSignUp(e.target)}
+                // onClick={(e) => handleSignUp(e.target)}
                 >
                   Sign Up
                 </button>
@@ -231,8 +230,8 @@ export default function Auth() {
           </div>
         ) : (
           <div className="flex items-center justify-center w-[90%] mx-auto">
-            <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Login</h2>
+            <div className="w-full bg-white rounded-lg shadow-md p-6 md:w-[60%] md:text-2xl">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 md:text-4xl">Login</h2>
               <form className="flex flex-col" onSubmit={(e) => handleLogin(e)}>
                 <input
                   type="email"
@@ -251,7 +250,7 @@ export default function Auth() {
                 <div className="flex items-center justify-between flex-wrap">
                   <label
                     htmlFor="remember-me"
-                    className="text-sm text-gray-900 cursor-pointer"
+                    className="text-sm text-gray-900 cursor-pointer md:text-xl"
                   >
                     <input
                       type="checkbox"
@@ -264,21 +263,22 @@ export default function Auth() {
                   </label>
                   <a
                     href="#"
-                    className="text-sm text-blue-500 hover:underline mb-0.5"
+                    className="text-sm text-blue-500 hover:underline mb-0.5 md:text-xl"
                   >
                     Forgot password?
                   </a>
-                  <p className="text-gray-900 mt-4">
-                    {" "}
-                    Don't have an account?{" "}
+                  <div className="flex items-center gap-x-2">
+                    <p className="text-gray-900 mt-4">
+                      Don't have an account?
+                    </p>
                     <a
                       href="#"
-                      className="text-sm text-blue-500 -200 hover:underline mt-4"
+                      className="text-sm text-blue-500 -200 hover:underline mt-4 md:text-xl"
                       onClick={() => setIsSignUpShowing(!isSignUpShowing)}
                     >
                       Sign up
                     </a>
-                  </p>
+                  </div>
                 </div>
                 <button
                   type="submit"

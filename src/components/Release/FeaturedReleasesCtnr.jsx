@@ -69,7 +69,7 @@ export default function FeaturedAlbumsCtnr() {
 
     newArray.sort((a, b) => b.count - a.count);
 
-    console.log(newArray);
+    // console.log(newArray);
     return newArray;
   }
 
@@ -127,8 +127,8 @@ export default function FeaturedAlbumsCtnr() {
 
   return (
     <>
-      <div className="px-2 py-2 md:w-fit md:self-center">
-        <h4>Popular this week</h4>
+      <div className="px-2 py-2 md:w-fit md:self-center md:mb-6">
+        <h4 className="md:text-3xl md:my-2 text-xl">Popular this week</h4>
         <div className="pt-1 flex gap-x-3 overflow-auto whitespace-nowrap">
           {releases && releases.map((release) => {
             let releaseInfo = {
