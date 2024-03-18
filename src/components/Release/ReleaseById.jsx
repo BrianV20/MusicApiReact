@@ -20,6 +20,7 @@ import Review from "../Review/Review";
 import Release from "./Release";
 import swal from "sweetalert";
 import { getGenre } from "../../services/Genre";
+import NavBar from "../NavBar";
 
 export default function ReleaseById() {
   const params = useParams();
@@ -31,7 +32,7 @@ export default function ReleaseById() {
   const [wishlistIcons, setWishlistIcons] = useState([]);
   const [numberOfStars, setNumberOfStars] = useState(0.0);
   const [menuStyles, setMenuStyles] = useState("");
-  const [likeStyle, setLikeStyle] = useState("fa-regular fa-heart text-2xl");
+  const [likeStyle, setLikeStyle] = useState("fa-regular fa-heart text-2xl md:text-3xl");
   const [ratingAverage, setRatingAverage] = useState(0);
   const [numberOfRatings, setNumberOfRatings] = useState(0);
   const [releaseReviews, setReleaseReviews] = useState([]);
@@ -41,7 +42,7 @@ export default function ReleaseById() {
 
   const toggleMenu = () => {
     setMenuStyles(
-      "bg-gradient-to-b from-orange-200 to-orange-400 h-[50%] translate-y-full transition-all duration-300 ease-in-out fixed bottom-0 inset-0 z-20"
+      "bg-gradient-to-b from-blue-200 to-emerald-300 h-[50%] translate-y-full transition-all duration-300 ease-in-out fixed bottom-0 inset-0 z-20 lg:w-[50%] lg:mx-auto lg:rounded-t-xl border-2 border-black"
     );
     setIsMenuVisible(!isMenuVisible);
   };
@@ -54,14 +55,14 @@ export default function ReleaseById() {
         "no esta en wishlist por lo que se va a agregar a la wishlist"
       );
       addReleaseToWishlist(userId + "-" + params.id);
-      setWishlistIcons(["fa-solid fa-clock text-2xl", "fa-solid fa-minus"]);
+      setWishlistIcons(["fa-solid fa-clock text-2xl md:text-3xl", "fa-solid fa-minus"]);
     } else {
       // significa que ya esta en wishlist
       console.log(
         "ya esta en wishlist por lo que no se puede agregar y se va a eliminar de la wishlist"
       );
       deleteReleaseFromWishlist(userId + "-" + params.id);
-      setWishlistIcons(["fa-regular fa-clock text-2xl", "fa-solid fa-plus"]);
+      setWishlistIcons(["fa-regular fa-clock text-2xl md:text-3xl", "fa-solid fa-plus"]);
       return;
     }
   };
@@ -77,12 +78,12 @@ export default function ReleaseById() {
         const ids = releasesIds ? releasesIds.split(",") : "";
         if (ids.includes(params.id)) {
           // console.log("ya esta en wishlist");
-          setWishlistIcons(["fa-solid fa-clock text-2xl", "fa-solid fa-minus"]);
+          setWishlistIcons(["fa-solid fa-clock text-2xl md:text-3xl", "fa-solid fa-minus"]);
           return true;
         } else {
           // console.log("no esta en wishlist");
           setWishlistIcons([
-            "fa-regular fa-clock text-2xl",
+            "fa-regular fa-clock text-2xl md:text-3xl",
             "fa-solid fa-plus",
           ]);
           return false;
@@ -96,7 +97,7 @@ export default function ReleaseById() {
     // console.log("LOS LIKED RELEASES: " + likedReleases);
     if (likedReleases.includes(params.id + ",")) {
       // console.log("YA LO TEINE");
-      setLikeStyle("fa-solid fa-heart text-2xl");
+      setLikeStyle("fa-solid fa-heart text-2xl md:text-3xl");
     }
   };
 
@@ -118,6 +119,7 @@ export default function ReleaseById() {
     console.log("calificar release");
     updateRating(userId + "-" + params.id + "-" + numberOfStars).then(
       (data) => {
+        swal("Success", "Your rating has been uploaded", "success");
         console.log(data);
       }
     );
@@ -127,11 +129,11 @@ export default function ReleaseById() {
   const reviewRelease = () => {
     if (menuStyles.includes("translate-z-full")) {
       setMenuStyles(
-        "bg-gradient-to-b from-orange-200 to-orange-400 inset-0 absolute h-[50%] translate-y-full transition-all duration-300 ease-in-out z-20"
+        "bg-gradient-to-b from-blue-200 to-emerald-300 inset-0 absolute h-[50%] translate-y-full transition-all duration-300 ease-in-out z-20 lg:w-[50%] lg:mx-auto lg:rounded-t-xl border-2 border-black"
       );
     } else {
       setMenuStyles(
-        "bg-gradient-to-b from-orange-200 to-orange-400 inset-0 absolute h-[100%] translate-z-full transition-all duration-300 ease-in-out z-20"
+        "bg-gradient-to-b from-blue-200 to-emerald-300 inset-0 absolute h-[100%] translate-z-full transition-all duration-300 ease-in-out z-20 lg:w-[50%] lg:mx-auto lg:rounded-t-xl lg:translate-y-[16rem] border-2 border-black"
       );
     }
   };
@@ -144,7 +146,7 @@ export default function ReleaseById() {
     }
     console.log("MAL");
     if (likeStyle == "fa-regular fa-heart text-2xl") {
-      setLikeStyle("fa-solid fa-heart text-2xl");
+      setLikeStyle("fa-regular fa-heart text-2xl md:text-3xl");
     } else {
       setLikeStyle("fa-regular fa-heart text-2xl");
     }
@@ -182,7 +184,7 @@ export default function ReleaseById() {
     const temp2 = temp.filter((r) => r.artistId == id);
     setReleasesByReleaseArtist(temp2);
   };
-  
+
   // const functionToSetGenresOfRelease = async (genresArray) => {
   //   var newArray = [];
   //   genresArray.map((g) => {
@@ -207,53 +209,57 @@ export default function ReleaseById() {
     const fetchData = async () => {
       const data = await getRelease(params.id);
       setRelease(data);
-  
+
       if (data.artistId) {
         const artistData = await getArtist(data.artistId);
         setArtist(artistData);
         getReleasesByArtist(artistData.id);
       }
-  
+
       const releaseId = data.id;
-  
+
       const ratingsData = await getRatings();
       const ratingsOfRelease = ratingsData.filter((r) => r.releaseId == releaseId);
       const sumOfRatingsOfRelease = ratingsOfRelease.reduce((sum, r) => sum + Number(r.ratingValue), 0);
       const numberOfRatingsOfRelease = ratingsOfRelease.length;
       setNumberOfRatings(numberOfRatingsOfRelease);
-  
+
       if (numberOfRatingsOfRelease > 0) {
         setRatingAverage(Number((sumOfRatingsOfRelease / numberOfRatingsOfRelease).toFixed(2)));
       } else {
         setRatingAverage(0);
       }
-  
+
       const genres = await getGenresOfRelease(releaseId);
       var temp = genres.split(',');
       var index = temp.indexOf('');
-      if(index !== -1){
+      if (index !== -1) {
         temp.splice(index, 1);
       }
-  
+
       const genresData = await getGenresByIds(temp);
       // console.log(genresData);
       setGenresOfRelease(genresData);
-  
+
       const userData = await GetUserFromToken();
       setUserId(userData.id);
-  
+
       const ratingData = await getRating(userData.id + "-" + params.id);
       if (ratingData.id != undefined) {
         setNumberOfStars(ratingData.ratingValue);
       }
-  
+
       checkIfTheReleaseIsOnWishlist();
       checkIfReleaseIsAlreadyLiked();
       getReleaseReviews();
     };
-  
+
     fetchData();
   }, [params.id]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
 
   // useEffect(() => {
   //   getRelease(params.id)
@@ -295,7 +301,7 @@ export default function ReleaseById() {
 
   //         setGenresOfRelease(getGenresByIds(temp));
   //         // console.log(typeof getGenresByIds(temp))
-          
+
   //         // console.log(temp);
   //         // functionToSetGenresOfRelease(temp);
   //         // var genresArray = [];
@@ -345,16 +351,20 @@ export default function ReleaseById() {
           <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
         </div>
       </div> */}
-      <GoBackNavbar />
+      {window.innerWidth < 900 ? (<GoBackNavbar />) : <NavBar />}
+      {/* <GoBackNavbar /> */}
 
       <div className="bg-slate-200">
-        <div className="md:w-[80%] md:mx-auto min-h-screen">
+        <div className="md:w-[80%] md:mx-auto min-h-screen lg:w-[70%] pt-4">
           <div className="grid grid-cols-2 p-2 md:p-5">
             <div>
               <h2 className="text-2xl font-semibold md:text-4xl">{release.title}</h2>
-              <Link to={`/artists/${artist.id}`}>
-                <p className="text-slate-500 mt-3 mb-1 md:text-3xl md:mt-4">By: {artist.name}</p>
-              </Link>
+              <div className="flex">
+                <p className="text-slate-500 mt-3 mb-1 md:text-3xl md:mt-4">By:</p>
+                <Link to={`/artists/${artist.id}`} className="flex">
+                  <p className="text-slate-500 mt-3 mb-1 md:text-3xl md:mt-4 ml-2 lg:hover:text-blue-400 duration-200 transition-all">{artist.name}</p>
+                </Link>
+              </div>
               {release.releaseDate && typeof release.releaseDate === "string" ? (
                 <p className="text-slate-500 md:text-3xl md:mt-2">{extractYear(release.releaseDate)}</p>
               ) : (
@@ -388,14 +398,14 @@ export default function ReleaseById() {
               {/* {console.log(typeof genresOfRelease)} */}
               {/* {console.log(genresOfRelease)} */}
               <div className="flex-1 flex flex-wrap">
-              {genresOfRelease && genresOfRelease.map((genre, index) => (
-                <div key={index}>
-                  {genresOfRelease[index+1] == undefined ? 
-                  <p className="mr-1">{genre.name}</p>
-                  :
-                  <p className="mr-1">{genre.name + ","}</p>}
-                </div>
-              ))}
+                {genresOfRelease && genresOfRelease.map((genre, index) => (
+                  <div key={index}>
+                    {genresOfRelease[index + 1] == undefined ?
+                      <p className="mr-1">{genre.name}</p>
+                      :
+                      <p className="mr-1">{genre.name + ","}</p>}
+                  </div>
+                ))}
               </div>
             </div>
             <div className="flex m-1 flex-col">
@@ -436,7 +446,7 @@ export default function ReleaseById() {
                 // console.log(releaseInfo);
                 return (
                   <div
-                    className="flex bg-slate-200 mb-2 w-[95%] mx-auto items-center gap-2 rounded-lg"
+                    className="flex bg-slate-200 mb-2 w-[95%] mx-auto items-center gap-2 rounded-lg lg:hover:cursor-pointer"
                     key={release.id}
                     onClick={() => navigate(releaseInfo.href)}
                   >
@@ -448,7 +458,7 @@ export default function ReleaseById() {
             </div>
           </div>
 
-          <div className="px-2 py-5 text-lg text-white bg-[#0CE959] rounded-full sticky inline-block left-2 bottom-4 z-30 md:px-4 md:py-7 md:text-4xl">
+          <div className="px-2 py-5 text-lg text-white bg-[#0CE959] rounded-full sticky inline-block bottom-4 z-30 md:px-4 md:py-7 md:text-4xl lg:text-3xl lg:py-5 lg:px-2 lg:ml-5 lg:hover:cursor-pointer">
             <i
               className="fa-solid fa-plus px-3 flex items-center"
               onClick={toggleMenu}
@@ -458,34 +468,35 @@ export default function ReleaseById() {
           {isMenuVisible && (
             <div className={menuStyles}>
               {/* <div className={isMenuVisible ? 'bg-blue-500 inset-0 absolute h-[50%] transition-all duration-300 ease-in-out translate-y-full' : 'bg-blue-500 inset-0 absolute h-[60%] transition-all duration-300 ease-in-out hidden'}> */}
-              <div className="flex justify-around text-center py-1">
-                <div>
+              <div className="flex justify-around text-center py-1 md:text-3xl md:pt-3 bg-emerald-200 rounded-lg border-2 border-slate-400 mt-4 mx-3
+              ">
+                {/* <div>
                   <i className="fa-regular fa-eye text-2xl"></i>
-                  <p>Watch</p>
-                </div>
-                <div onClick={likeRelease}>
+                  <p>Listen</p>
+                </div> */}
+                <div onClick={likeRelease} className="lg:hover:cursor-pointer">
                   <i className={likeStyle}></i>
                   <p>Like</p>
                 </div>
-                <div onClick={reviewRelease}>
-                  <i className="fa-solid fa-plus text-2xl"></i>
+                <div onClick={reviewRelease} className="lg:hover:cursor-pointer">
+                  <i className="fa-solid fa-plus text-2xl md:text-3xl"></i>
                   <p>Review</p>
                 </div>
                 <div>
-                  <div onClick={addToWatchlist}>
+                  <div onClick={addToWatchlist} className="lg:hover:cursor-pointer">
                     <i className={wishlistIcons[0]}></i>
                     <i className={wishlistIcons[1]}></i>
                     <p>Wishlist</p>
                   </div>
                 </div>
               </div>
-              <div className="text-2xl my-4 mx-2 border-2 border-black flex justify-center text-center">
-                <div className="flex border-2 border-blue-400 w-[40%] justify-center">
-                  <div className="">
-                    <i className="fa-solid fa-chevron-up" onClick={addStar}></i>
+              <div className="text-2xl my-4 flex justify-center text-center gap-x-5 pb-4 bg-emerald-200 rounded-lg border-2 border-slate-400 mx-3 md:text-3xl">
+                <div className="flex w-[40%] justify-center">
+                  <div>
+                    <i className="fa-solid fa-chevron-up lg:hover:cursor-pointer" onClick={addStar}></i>
                     <p>{numberOfStars ? numberOfStars : 0}</p>
                     <i
-                      className="fa-solid fa-chevron-down"
+                      className="fa-solid fa-chevron-down lg:hover:cursor-pointer"
                       onClick={removeStar}
                     ></i>
                   </div>
@@ -499,11 +510,12 @@ export default function ReleaseById() {
                 </div>
                 <div className="w-[40%] self-center">
                   <button
-                    className="bg-gray-300 h-10 w-[5rem] m-auto"
+                    className="inline-flex cursor-pointer items-center gap-1 rounded border border-slate-300 bg-gradient-to-b from-slate-50 to-slate-200 px-4 py-2 font-semibold hover:opacity-90 active:opacity-100"
                     onClick={rateRelease}
                   >
                     Rate
                   </button>
+
                 </div>
               </div>
               {menuStyles.includes("translate-z-full") && (

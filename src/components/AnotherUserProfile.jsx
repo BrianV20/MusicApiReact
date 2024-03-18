@@ -7,6 +7,7 @@ import { getRatings } from "../services/Rating";
 import { getWishlistByUser } from "../services/Wishlist";
 import { getRelease } from "../services/Release";
 import GoBackNavbar from "./GoBackNavbar";
+import NavBar from "./NavBar";
 
 export default function AnotherUserProfile() {
   const params = useParams();
@@ -75,28 +76,34 @@ export default function AnotherUserProfile() {
     // });
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
   return (
     <>
-      <GoBackNavbar />
+      {window.innerWidth < 900 ? (<GoBackNavbar />) : <NavBar />}
 
       <div className="bg-slate-200">
-        <div className="md:w-[80%] md:mx-auto min-h-screen">
-          <div className="md:pb-3 md:pt-6">
-            <img
-              className="w-[40%] mx-auto rounded-full py-2 md:w-[40%]"
-              src={user.img}
-              alt="user profile pic"
-            />
+        <div className="md:w-[80%] md:mx-auto min-h-screen lg:w-[70%]">
+          <div className="md:pb-3 md:pt-6 flex items-center justify-center pt-2 lg:justify-start">
+            <div className="w-[30%] lg:w-[18%]">
+              <img
+                className="mx-auto rounded-full border-2 border-slate-400"
+                src={user.img}
+                alt="user profile pic"
+              />
+            </div>
+            <p className="text-xl text-center font-semibold md:text-3xl w-[50%] lg:w-[20%]">{user.username}</p>
           </div>
 
-          <p className="text-xl text-center mb-3 font-semibold md:text-3xl">{user.username}</p>
 
             <div className="px-2 mb-5 mt-2">
               <p className="mb-2 md:text-2xl">- FAVORITES</p>
               <div className="flex gap-x-2">
                 {favoriteReleases && favoriteReleases.length > 0 ? favoriteReleases.map((r) => {
                   return <div key={r.id}>
-                    <img src={r.cover} alt={r.title} className="w-[6rem] min-h-[5rem] rounded-xl md:w-[9rem] md:min-h-[10rem] md:border-2 border-slate-400" onClick={() => navigate("/releases/" + r.id)} />
+                    <img src={r.cover} alt={r.title} className="w-[6rem] min-h-[5rem] rounded-xl md:w-[9rem] md:min-h-[10rem] md:border-2 border-slate-400 lg:hover:cursor-pointer lg:hover:opacity-70 lg:transition-all lg:ease-in lg:duration-200" onClick={() => navigate("/releases/" + r.id)} />
                   </div>
                 }) : (
                   <div className="px-3 border-2 border-slate-400 md:w-full md:text-xl">

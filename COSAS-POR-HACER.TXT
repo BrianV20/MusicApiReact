@@ -35,4 +35,4 @@ FUNCIONES PRINCIPALES:
 
 
 
-🐱‍👤🎶 - Hacerla responsive.
+🐱‍👤🎶 - Hacerla responsive (ponerle efectos de hover y transition a las cosas). Terminar hovers de botones y esas cosas para pc

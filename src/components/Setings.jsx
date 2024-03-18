@@ -4,6 +4,7 @@ import { GetLikedReleases, GetUserFromToken } from "../services/User";
 import { updateUser, GetFavoriteReleases } from "../services/User";
 import { getRelease, getReleases } from "../services/Release";
 import GoBackNavbar from "./GoBackNavbar";
+import NavBar from "./NavBar";
 
 export default function Settings() {
   const [options, setOptions] = useState(["Profile", "Auth"]);
@@ -167,7 +168,7 @@ export default function Settings() {
 
   return (
     <>
-      <GoBackNavbar />
+      {window.innerWidth < 900 ? (<GoBackNavbar />) : <NavBar />}
 
       <div className="bg-slate-200">
         <div className="md:w-[80%] md:mx-auto min-h-screen">
@@ -179,8 +180,8 @@ export default function Settings() {
               key={index}
               className={
                 selectedOption == opt
-                ? "font-semibold border-b-2 border-blue-500 md:border-b-4"
-                : ""
+                ? "font-semibold border-b-2 border-blue-500 md:border-b-4 lg:hover:cursor-pointer"
+                : "lg:hover:cursor-pointer"
               }
               onClick={() => handleSelectOption(opt)}
               >
@@ -237,10 +238,10 @@ export default function Settings() {
                   </select>
                 </div>
 
-                <div className="mt-5 mb-7 md:mt-10">
+                <div className="mt-5 mb-7 md:mt-10 lg:w-[60%]">
                   <div className="flex flex-col">
                     <p className="text-xl md:text-2xl">Favorite releases: </p>
-                    <button type="button" onClick={handleFavoriteReleasesButton} className="bg-blue-400 py-1 font-semibold border-2 border-black text-xl md:text-2xl md:mt-4">Show</button>
+                    <button type="button" onClick={handleFavoriteReleasesButton} className="bg-blue-400 py-1 font-semibold border-2 border-black text-xl md:text-2xl md:mt-4 lg:hover:duration-200 lg:transition-all lg:hover:cursor-pointer lg:hover:text-white">Show</button>
                   </div>
                   {showFavoriteReleases ? (
                     <div className="bg-blue-300 pl-4 flex flex-col gap-y-2 py-2 rounded-b-xl md:text-2xl">
@@ -268,12 +269,12 @@ export default function Settings() {
                         }): ''}
                       </select>
 
-                      <button type="button" className="bg-green-200 p-2 rounded-lg w-fit mx-auto font-semibold border-2 border-black mt-2" onClick={saveFavorites}>Save favorites</button>
+                      <button type="button" className="bg-emerald-300 p-2 rounded-lg w-fit mx-auto font-semibold border-2 border-black mt-2 lg:hover:duration-200 lg:transition-all lg:hover:cursor-pointer lg:hover:text-white lg:hover:bg-emerald-600" onClick={saveFavorites}>Save favorites</button>
                     </div>
                   ) : ''}
                 </div>
 
-                <button type="submit" className="bg-green-400 rounded-md px-2 py-1 my-5 font-semibold border-2 border-black text-lg md:text-2xl">
+                <button type="submit" className="bg-emerald-300 rounded-md px-2 py-1 my-5 font-semibold border-2 border-black text-lg md:text-2xl lg:hover:duration-200 lg:transition-all lg:hover:cursor-pointer lg:hover:text-white lg:hover:bg-emerald-600">
                   Save changes
                 </button>
               </form>

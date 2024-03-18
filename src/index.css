@@ -6,6 +6,10 @@
     .navItem {
         @apply pb-2 flex items-center justify-center hover:border-violet-800 hover:border-b-red-700 w-full transition-all ease-in-out duration-200;
     }
+
+    .selectedNavItem {
+        @apply font-semibold border-b-2 border-blue-500 pb-2 flex items-center justify-center w-full transition-all ease-in-out duration-200;
+    }
     
     .navItemLg {
         @apply hidden md:block md:border-2 md:border-violet-800 md:px-2;

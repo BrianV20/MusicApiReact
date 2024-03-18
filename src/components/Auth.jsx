@@ -109,6 +109,7 @@ export default function Auth() {
     }
     if (!verifySignInFields()) {
       console.log("Invalid fields");
+      swal("Error", "Incomplete fields.", "error");
       return;
     }
 

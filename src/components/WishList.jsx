@@ -18,13 +18,18 @@ export default function WishList() {
     const idsToSave = ids.filter(id => id !== '');
     if (idsToSave.length === 0 || idsToSave == null) return null;
     const promises = idsToSave.map((id) => getRelease(id));
-    Promise.all(promises).then((releases) => {
-      setReleases(releases);
-      setTotalPages(Math.ceil(releases.length / itemsPerPage));
-      setCurrentItems(releases.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)); //esto basicamente corta el array y guarda los elementos que se mostrarian en la primer pagina
-    });
+    try{
+      Promise.all(promises).then((releases) => {
+        setReleases(releases);
+        setTotalPages(Math.ceil(releases.length / itemsPerPage));
+        setCurrentItems(releases.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)); //esto basicamente corta el array y guarda los elementos que se mostrarian en la primer pagina
+      });
+    }
+    catch(e){
+      console.log("ESTE ES EL ERROR: " + e);
+    }
     // console.log("Total pages: " + totalPages);
-    console.log("idsToSave: ", idsToSave);
+    // console.log("idsToSave: ", idsToSave);
   };
 
   const handlePageChangeByArrow = (e) => {
@@ -72,11 +77,15 @@ export default function WishList() {
     setCurrentItems(newCurrentItems);
   }, [currentPage]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
   return (
     <>
       <NavBar />
       <div className="bg-slate-200">
-        <div className="md:w-[80%] min-h-screen md:mx-auto">
+        <div className="md:w-[80%] min-h-screen md:mx-auto lg:w-[70%]">
           <div className="pt-4 md:pt-7">
             {/* <h1 className="text-center text-3xl py-2">WishList</h1> */}
             {localStorage.getItem("token") ? (
@@ -85,18 +94,20 @@ export default function WishList() {
                 {currentItems.length > 0 ? (
                   <div className="flex flex-wrap justify-center gap-x-2 gap-y-2">
                     {currentItems.map((release) => {
-                      let releaseInfo = {
-                        href: "/releases/" + release.id,
-                        src: release.cover,
-                        alt: release.title,
-                      };
-                      return (
-                        <Release
-                          key={release.id}
-                          albumInfo={releaseInfo}
-                          styles={styles}
-                        />
-                      );
+                      if(release && release.title != undefined && release.cover != undefined){
+                        let releaseInfo = {
+                          href: "/releases/" + release.id,
+                          src: release.cover,
+                          alt: release.title,
+                        };
+                        return (
+                          <Release
+                            key={release.id}
+                            albumInfo={releaseInfo}
+                            styles={styles}
+                          />
+                        );
+                      }
                     })}
                   </div>
                 ) : (
@@ -109,7 +120,7 @@ export default function WishList() {
           </div>
 
           <div className="flex justify-center text-2xl items-center pt-7 pb-5 md:text-4xl md:pt-10 md:gap-x-6">
-            <i className={totalPages > 1 ? 'fa-solid fa-arrow-left px-3' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
+            <i className={totalPages > 1 ? 'fa-solid fa-arrow-left px-3 lg:hover:cursor-pointer' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
               <div key={pageNumber}>
                 {pageNumber == currentPage ? (
@@ -123,7 +134,7 @@ export default function WishList() {
                 )}
               </div>
             ))}
-            <i className={totalPages > 1 ? 'fa-solid fa-arrow-right px-3' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
+            <i className={totalPages > 1 ? 'fa-solid fa-arrow-right px-3 lg:hover:cursor-pointer' : 'hidden'} onClick={(e) => handlePageChangeByArrow(e)}></i>
           </div>
         </div>
       </div>

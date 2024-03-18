@@ -45,7 +45,7 @@ export default function Search() {
     <>
       <div className="bg-blue-400 md:p-2 md:text-2xl border-2 border-b-black border-r-blue-400 border-t-blue-400 border-l-blue-400 flex">
         <div onClick={() => navigate(-1)}>
-          <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1"></i>
+          <i className="fa-solid fa-arrow-left text-2xl border-2 border-black py-1 px-2 mx-1 my-1 lg:hover:cursor-pointer"></i>
         </div>
 
         <div className="flex items-center mx-2">
@@ -60,7 +60,7 @@ export default function Search() {
             <input
               type="button"
               value="Search"
-              className="bg-blue-500 p-2 rounded-tr-lg rounded-br-lg text-white font-semibold hover:bg-blue-800 transition-colors"
+              className="bg-blue-500 p-2 rounded-tr-lg rounded-br-lg text-white font-semibold hover:bg-blue-800 transition-colors lg:hover:cursor-pointer"
               onClick={handleSearch}
             />
           </div>
@@ -69,7 +69,7 @@ export default function Search() {
 
       {searchRequest == true ? (
         <div className="bg-slate-200">
-          <div className="md:w-[80%] md:mx-auto pt-4">
+          <div className="md:w-[80%] md:mx-auto pt-4 min-h-screen">
             <div className="text-3xl bg-green-300 w-fit p-2 mx-auto mb-3 font-semibold rounded-xl">Releases</div>
             <div className="flex flex-nowrap overflow-scroll">
               {releases.map((rel) => {

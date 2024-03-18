@@ -44,11 +44,15 @@ export default function ReviewsCtnr() {
     setCurrentItems(newCurrentItems);
   }, [currentPage]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
   return (
     <>
       <NavBar option="Reviews" />
       <div className="bg-slate-200">
-        <div className="md:w-[80%] md:mx-auto min-h-screen">
+        <div className="md:w-[80%] md:mx-auto min-h-screen lg:w-[70%]">
         <div className="px-2 py-2">
           <h4 className="text-xl md:text-2xl md:pt-4 md:pb-2">Popular reviews this week</h4>
           <div className="pt-1 flex gap-x-3 overflow-x-scroll whitespace-nowrap flex-col">

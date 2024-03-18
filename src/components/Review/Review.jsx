@@ -27,7 +27,7 @@ export default function Review({ reviewInfo }) {
   }, []);
 
   return (
-    <div className="border-2 border-t-slate-400 w-full pt-3 pb-2 h-[14rem] overflow-y-hidden">
+    <div className="border-2 border-t-slate-400 w-full pt-3 pb-2 h-[14rem] overflow-y-hidden lg:hover:cursor-pointer">
       {/* <Link to={"/reviews/" + reviewId}> */}
       <div onClick={() => navigate(`/reviews/${reviewId}`)}>
         <div className="flex flex-wrap justify-between">

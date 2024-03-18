@@ -5,6 +5,7 @@ import { getReleases } from "../../services/Release";
 import { getGenre } from "../../services/Genre";
 import Release from "../Release/Release";
 import GoBackNavbar from "../GoBackNavbar";
+import NavBar from "../NavBar";
 
 export default function ArtistById() {
   const params = useParams();
@@ -54,12 +55,16 @@ export default function ArtistById() {
     fetchData();
   }, [])
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
   return (
     <>
-      <GoBackNavbar />
+      {window.innerWidth < 900 ? (<GoBackNavbar />) : <NavBar />}
 
       <div className="bg-slate-200">
-        <div className="md:w-[80%] md:mx-auto min-h-screen">
+        <div className="md:w-[80%] md:mx-auto min-h-screen lg:w-[70%] pt-4">
           <div className="grid grid-cols-2 p-2 md:p-5">
             <div>
               <h2 className="text-2xl font-semibold md:text-4xl">{artist.name}</h2>
@@ -81,7 +86,7 @@ export default function ArtistById() {
 
             <div>
               <img
-                className="border-2 border-slate-400"
+                className="border-2 border-slate-400 lg:w-[25rem]"
                 src={artist.img}
                 alt={artist.name}
               />
@@ -100,7 +105,7 @@ export default function ArtistById() {
                 console.log(releasesByArtist);
                 return (
                   <div
-                    className="flex bg-slate-200 mb-2 w-[95%] mx-auto items-center gap-2 rounded-lg"
+                    className="flex bg-slate-200 mb-2 w-[95%] mx-auto items-center gap-2 rounded-lg lg:hover:cursor-pointer"
                     key={release.id}
                     onClick={() => navigate(releaseInfo.href)}
                   >
