@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev2": "npm start",
     "build": "vite build",
     "build2": "npm i",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
